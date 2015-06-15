@@ -1,6 +1,5 @@
 package com.clouway.subnets;
 
-import com.clouway.subnets.core.PropertyReader;
 import com.clouway.subnets.http.HttpModule;
 import com.clouway.subnets.http.InterceptorModule;
 import com.clouway.subnets.persistence.PersistenceModule;
@@ -21,7 +20,7 @@ import java.util.EnumSet;
 public class Main {
 
   public static void main(String[] args) throws Exception {
-    PropertyReader reader = getPropertyReader(args);
+    PropertyReader reader = getPropertyReader(new String[]{"subnets/config.properties"});
     Server jetty = getJetty(reader);
     jetty.start();
     jetty.join();
@@ -35,7 +34,7 @@ public class Main {
     servletContextHandler.addEventListener(new GuiceServletContextListener() {
       @Override
       protected Injector getInjector() {
-        return Guice.createInjector(new HttpModule(), new PersistenceModule(), new InterceptorModule());
+        return Guice.createInjector(new HttpModule(), new PersistenceModule(reader),new InterceptorModule());
       }
     });
 

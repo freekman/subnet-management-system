@@ -17,6 +17,7 @@ module.exports = function (config) {
     files: [
       'vendor/angular/angular.js',
       'vendor/angular-mocks/angular-mocks.js',
+      'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
       'src/app/modules/*.js',
       'src/test/*.js'
     ],

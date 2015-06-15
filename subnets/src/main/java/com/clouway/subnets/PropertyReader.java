@@ -1,4 +1,4 @@
-package com.clouway.subnets.core;
+package com.clouway.subnets;
 
 import java.io.FileInputStream;
 import java.io.IOException;

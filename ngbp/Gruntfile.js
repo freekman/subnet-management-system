@@ -41,14 +41,13 @@ module.exports = function ( grunt ) {
      * pairs are evaluated based on this very configuration object.
      */
     meta: {
-      banner: 
-        '/**\n' +
-        ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        ' * <%= pkg.homepage %>\n' +
-        ' *\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-        ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
-        ' */\n'
+      banner: '/**\n' +
+      ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+      ' * <%= pkg.homepage %>\n' +
+      ' *\n' +
+      ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+      ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
+      ' */\n'
     },
 
     /**
@@ -67,13 +66,13 @@ module.exports = function ( grunt ) {
     bump: {
       options: {
         files: [
-          "package.json", 
+          "package.json",
           "bower.json"
         ],
         commit: false,
         commitMessage: 'chore(release): v%VERSION%',
         commitFiles: [
-          "package.json", 
+          "package.json",
           "client/bower.json"
         ],
         createTag: false,
@@ -82,13 +81,13 @@ module.exports = function ( grunt ) {
         push: false,
         pushTo: 'origin'
       }
-    },    
+    },
 
     /**
      * The directories to delete when `grunt clean` is executed.
      */
-    clean: [ 
-      '<%= build_dir %>', 
+    clean: [
+      '<%= build_dir %>',
       '<%= compile_dir %>'
     ],
 
@@ -177,7 +176,8 @@ module.exports = function ( grunt ) {
        */
       build_css: {
         src: [
-          'vendor/bootstrap/dist/css/bootstrap.css'
+          'vendor/bootstrap/dist/css/bootstrap.css',
+          'src/app/treeview.css'
         ],
         dest: 'src/partials/concat.css'
       },
@@ -185,6 +185,7 @@ module.exports = function ( grunt ) {
         src: [
           'vendor/angular/angular.js',
           'vendor/angular-ui-router/release/angular-ui-router.js',
+          'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
           'src/app/modules/*',
           'vendor/jquery/dist/jquery.js',
           'vendor/bootstrap/dist/js/bootstrap.js'

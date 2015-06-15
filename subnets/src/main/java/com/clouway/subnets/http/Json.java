@@ -2,91 +2,92 @@ package com.clouway.subnets.http;
 
 
 import com.clouway.subnets.core.HibernateValidationException;
-import com.clouway.subnets.core.ObjectCastException;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.google.sitebricks.client.Transport;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Created byivan.genchev1989@gmail.com.
+ * @author Marian Zlatev <mzlatev91@gmail.com>
  */
+class Json implements Transport {
 
-public class Json implements Transport {
-  private HttpServletResponse response;
-
-  @Inject
-  public Json(HttpServletResponse response) {
-    this.response = response;
-  }
+  private Gson gson = new Gson();
+  private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   @Override
-  public <T> T in(InputStream in, Class<T> type) throws IOException {
-    String json = "";
-    json = getJson(in, json);
-    Set<ConstraintViolation<T>> errors = null;
-    T object = getObjectFromJson(type, json, null);
-    if (null != object) {
-      ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-      Validator validator = factory.getValidator();
-      errors = validator.validate(object);
+  public <T> T in(InputStream inputStream, Class<T> aClass) throws IOException {
+
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+    T dto = gson.fromJson(reader.readLine(), aClass);
+
+    reader.close();
+
+    Set<ConstraintViolation<T>> constraintViolations = validator.validate(dto);
+
+    if (constraintViolations.isEmpty()) {
+      return dto;
     }
-    if (errors.size() == 0) {
-      return object;
-    } else {
-      throw new HibernateValidationException();
+
+    throw new HibernateValidationException();
+  }
+
+  @Override
+  public <T> T in(InputStream inputStream, TypeLiteral<T> typeLiteral) throws IOException {
+
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+    T dto = gson.fromJson(reader.readLine(), typeLiteral.getType());
+
+    reader.close();
+
+    Set<ConstraintViolation<T>> constraintViolations = validator.validate(dto);
+    if (constraintViolations.isEmpty()) {
+      return dto;
     }
+
+    throw new HibernateValidationException();
   }
 
   @Override
-  public <T> T in(InputStream in, TypeLiteral<T> type) throws IOException {
-    return null;
+  public <T> void out(OutputStream outputStream, Class<T> aClass, T t) throws IOException {
+    PrintWriter writer = new PrintWriter(new BufferedOutputStream(outputStream));
+    writer.println(gson.toJson(t));
+    writer.flush();
+    writer.close();
   }
-
-  @Override
-  public <T> void out(OutputStream out, Class<T> type, T data) throws IOException {
-  }
-
 
   @Override
   public String contentType() {
-    return null;
+    return "application/json";
   }
 
-  private <T> T getObjectFromJson(Class<T> type, String json, T object) {
-    Gson gson = new Gson();
-    try {
-      object = gson.fromJson(json, type);
-    } catch (JsonSyntaxException e) {
-      throw new ObjectCastException();
-    }
-    return object;
-  }
+  private <T> String buildErrorMessage(Set<ConstraintViolation<T>> violations) {
+    Iterator<ConstraintViolation<T>> iterator = violations.iterator();
+    StringBuilder builder = new StringBuilder();
 
-  private String getJson(InputStream in, String object) throws IOException {
-    InputStreamReader is = new InputStreamReader(in);
-    StringBuilder sb = new StringBuilder();
-    BufferedReader br = new BufferedReader(is);
-    String read = br.readLine();
-    while (read != null) {
-      object = read;
-      sb.append(read);
-      read = br.readLine();
+    while (iterator.hasNext()) {
+      ConstraintViolation<T> next = iterator.next();
+      builder.append(next.getPropertyPath().iterator().next().getName())
+              .append(" - ")
+              .append(next.getMessage())
+              .append("\n");
     }
-    return object;
+
+    return builder.toString();
   }
 
 }

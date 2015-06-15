@@ -7,3 +7,5 @@ ngbp/build/
 ngbp/bin/
 ngbp/node_modules/
 ngbp/vendor/
+subnets/src/main/webapp/partials/concat*
+ngbp/src/partials/concat*
