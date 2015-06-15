@@ -2,6 +2,7 @@ package com.clouway.subnets;
 
 import com.clouway.subnets.core.PropertyReader;
 import com.clouway.subnets.http.HttpModule;
+import com.clouway.subnets.http.InterceptorModule;
 import com.clouway.subnets.persistence.PersistenceModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -34,7 +35,7 @@ public class Main {
     servletContextHandler.addEventListener(new GuiceServletContextListener() {
       @Override
       protected Injector getInjector() {
-        return Guice.createInjector(new HttpModule(), new PersistenceModule());
+        return Guice.createInjector(new HttpModule(), new PersistenceModule(), new InterceptorModule());
       }
     });
 
@@ -42,17 +43,15 @@ public class Main {
 
     // You MUST add DefaultServlet or your server will always return 404s
     servletContextHandler.addServlet(DefaultServlet.class, "/");
-    servletContextHandler.setResourceBase("src/main/webapp");
+    servletContextHandler.setResourceBase("subnets/src/main/webapp");
     return server;
   }
 
   private static PropertyReader getPropertyReader(String[] args) {
     String configurationFile = "config.properties";
-
     if (args != null && args.length != 0) {
       configurationFile = args[0];
     }
-
     return new PropertyReader(configurationFile);
   }
 }

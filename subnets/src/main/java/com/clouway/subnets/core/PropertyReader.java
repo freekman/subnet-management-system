@@ -18,12 +18,13 @@ public class PropertyReader {
       InputStream stream = new FileInputStream(propName);
       properties.load(stream);
     } catch (IOException e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 
   public int getJettyPort() {
     try {
+
       return Integer.parseInt(properties.getProperty("jetty.port"));
     } catch (NumberFormatException e){
       return 8080;

@@ -5,7 +5,6 @@ var httpModule = angular.module('httpModule', []);
 
 httpModule.service('httpRequest', ['$http', '$q', function ($http, $q) {
   'use strict';
-
   this.send = function (method, url, data) {
     var deferred = $q.defer();
     $http({method: method, url: url, data: data})

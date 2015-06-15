@@ -185,7 +185,9 @@ module.exports = function ( grunt ) {
         src: [
           'vendor/angular/angular.js',
           'vendor/angular-ui-router/release/angular-ui-router.js',
-          'src/app/modules/*'
+          'src/app/modules/*',
+          'vendor/jquery/dist/jquery.js',
+          'vendor/bootstrap/dist/js/bootstrap.js'
         ],
         dest: 'src/partials/concat.js'
       },
