@@ -102,8 +102,8 @@ module.exports = function ( grunt ) {
         files: [
           { 
             src: [ '**' ],
-            dest: '<%= build_dir %>/assets/',
-            cwd: 'src/assets',
+            dest: '../subnets/src/main/webapp/partials',
+            cwd: 'src/partials',
             expand: true
           }
        ]   
@@ -177,10 +177,17 @@ module.exports = function ( grunt ) {
        */
       build_css: {
         src: [
-          '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          'vendor/bootstrap/dist/css/bootstrap.css'
         ],
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+        dest: 'src/partials/concat.css'
+      },
+      build_js: {
+        src: [
+          'vendor/angular/angular.js',
+          'vendor/angular-ui-router/release/angular-ui-router.js',
+          'src/app/modules/*'
+        ],
+        dest: 'src/partials/concat.js'
       },
       /**
        * The `compile_js` target is the concatenation of our application source
@@ -557,7 +564,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', ['concat','copy'] );
 
   /**
    * The default task is to build and compile.
