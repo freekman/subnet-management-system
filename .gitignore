@@ -1,4 +1,9 @@
 .idea
 target/
 *.iml
-
+ngbp/*.sw*
+ngbp/*~
+ngbp/build/
+ngbp/bin/
+ngbp/node_modules/
+ngbp/vendor/
