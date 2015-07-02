@@ -14,7 +14,7 @@ registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
   };
 }]);
 
-registerModule.controller("RegisterCtrl", ["$scope", "subnetGateway", function ($scope, subnetGateway) {
+registerModule.controller("RegisterCtrl", ["$scope", "subnetGateway", "$state", function ($scope, subnetGateway, $state) {
 
   $scope.selected = "";
 
@@ -29,10 +29,8 @@ registerModule.controller("RegisterCtrl", ["$scope", "subnetGateway", function (
       "category": $scope.selected,
       "ip": $scope.networkIP,
       "slash": $scope.slash
-    }).then(function (data) {
-      $scope.success = data;
-      $scope.error = "";
-
+    }).then(function () {
+      $state.go("subnet");
     }, function (error) {
       $scope.error = error;
       $scope.success = "";

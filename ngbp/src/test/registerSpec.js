@@ -2,7 +2,7 @@
  * Created by clouway on 15-6-15.
  */
 describe("registerModule", function () {
-  var scope, httpRequest, deffer, gateway;
+  var scope, httpRequest, deffer, gateway, state;
 
   beforeEach(module("registerModule"));
 
@@ -35,14 +35,19 @@ describe("registerModule", function () {
   describe("RegisterCtrl", function () {
 
     beforeEach(inject(function ($rootScope, $controller, $q) {
-      deffer = $q.defer();
-      scope = $rootScope.$new();
-      gateway = {
-        getAllCategories: jasmine.createSpy().andReturn(deffer.promise),
-        register: jasmine.createSpy().andReturn(deffer.promise)
-      };
-      $controller("RegisterCtrl", {$scope: scope, subnetGateway: gateway});
-    }));
+              deffer = $q.defer();
+              scope = $rootScope.$new();
+              state = {
+                go: jasmine.createSpy()
+              };
+              gateway = {
+                getAllCategories: jasmine.createSpy().andReturn(deffer.promise),
+                register: jasmine.createSpy().andReturn(deffer.promise)
+              };
+              $controller("RegisterCtrl", {$scope: scope, subnetGateway: gateway, $state: state});
+            })
+    )
+    ;
 
     it("should fetch categories", function () {
       var dummyObj = {"type": "TV"};
@@ -64,10 +69,11 @@ describe("registerModule", function () {
 
       scope.$digest();
 
-      expect(scope.success).toEqual(dummyObj);
+      expect(state.go).toHaveBeenCalledWith("subnet");
 
     });
 
   });
 
-});
+})
+;

@@ -565,8 +565,8 @@ module.exports = function (grunt) {
    * `delta`) and then add a new task called `watch` that does a clean build
    * before watching for changes.
    */
-  grunt.renameTask('watch', 'delta');
-  grunt.registerTask('watch', ['concat', 'copy']);
+  grunt.renameTask( 'watch', 'delta' );
+  grunt.registerTask( 'watch', ['concat','copy'] );
 
   /**
    * The default task is to build and compile.
