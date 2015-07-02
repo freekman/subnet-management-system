@@ -34,10 +34,11 @@ public class PersistenceModule extends AbstractModule {
     return new MongoClient(reader.getDbHost(), reader.getDbPort());
   }
 
-  @Provides
-  MongoDatabase provideDatabase(MongoClient client) {
-    return client.getDatabase("nets");
-  }
+//  @Provides
+//  MongoDatabase provideDatabase(MongoClient client) {
+//    return client.getDatabase("nets");
+//  }
+
 //  @Provides
 //  @Singleton
 //  MongoClient provideMongoClient() {

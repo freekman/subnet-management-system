@@ -1,4 +1,4 @@
-package matchers;
+package com.clouway.subnets.matchers;
 
 import com.google.sitebricks.headless.Reply;
 import org.hamcrest.Description;
@@ -39,5 +39,9 @@ public class ReplyStatus extends TypeSafeMatcher<Reply> {
   @Factory
   public static <T> ReplyStatus statusIs(int statusCode) {
     return new ReplyStatus(statusCode);
+  }
+
+  public static void bla(){
+
   }
 }

@@ -13,8 +13,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static matchers.ReplyStatus.statusIs;
 
+import static com.clouway.subnets.matchers.ReplyStatus.statusIs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RegisterServiceTest {
@@ -44,6 +44,6 @@ public class RegisterServiceTest {
       oneOf(register).register(new NewSubnet("asd", "asd", 1,""));
     }});
     Reply reply = registerService.register(request);
-    assertThat(reply,statusIs(200));
+    assertThat(reply, statusIs(200));
   }
 }

@@ -1,4 +1,4 @@
-package matchers;
+package com.clouway.subnets.matchers;
 
 import com.google.sitebricks.headless.Reply;
 import org.hamcrest.Description;

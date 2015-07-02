@@ -1,14 +1,18 @@
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
-var app = angular.module('app', ['ui.router', 'treeSubnet', 'category', 'header']);
+var app = angular.module('app', ['ui.router', 'httpModule', 'registerModule', 'treeSubnet', 'category', 'header']);
 
 app.config(['$stateProvider', '$urlRouterProvider',
   function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
     $stateProvider
-            .state(
-            '/tree', {
+            .state("register", {
+              url: '/',
+              templateUrl: 'partials/subnets.html',
+              controller: 'RegisterCtrl'
+            })
+            .state('/tree', {
               url: '/pools',
               templateUrl: 'partials/pools.html',
               controller: 'TreeCtrl'
