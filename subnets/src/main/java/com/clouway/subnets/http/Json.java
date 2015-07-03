@@ -3,6 +3,7 @@ package com.clouway.subnets.http;
 
 import com.clouway.subnets.core.HibernateValidationException;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.inject.TypeLiteral;
 import com.google.sitebricks.client.Transport;
 
@@ -31,9 +32,12 @@ class Json implements Transport {
   public <T> T in(InputStream inputStream, Class<T> aClass) throws IOException {
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-    T dto = gson.fromJson(reader.readLine(), aClass);
-
+    T dto;
+    try {
+      dto = gson.fromJson(reader.readLine(), aClass);
+    } catch (JsonSyntaxException e) {
+      throw new HibernateValidationException();
+    }
     reader.close();
 
     Set<ConstraintViolation<T>> constraintViolations = validator.validate(dto);

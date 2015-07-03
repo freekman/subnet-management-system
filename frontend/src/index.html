@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Subnets</title>
+    <script src="../vendor/angular/angular.js"></script>
+    <script src="../vendor/jquery/dist/jquery.js"></script>
+    <script src="../vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../vendor/angular-modal-service/dst/angular-modal-service.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="app/modules/app.js"></script>
+    <script src="app/modules/subnets.js"></script>
+    <script src="app/modules/notification.js"></script>
+    <script src="app/modules/http.js"></script>
+    <script src="app/modules/gateway.js"></script>
+    <script src="app/modules/header.js"></script>
+    <link rel="stylesheet" href="../vendor/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="app/subnet.css"/>
+</head>
+<body>
+<nets-header active-url="/"></nets-header>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4"><notification-box></notification-box></div>
+    <div class="col-md-4"></div>
+</div>
+
+<div ui-view=""></div>
+</body>
+</html>

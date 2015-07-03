@@ -7,9 +7,5 @@ import java.util.List;
  */
 
 public interface BindingFinder {
-  /**
-   * @return a List of bindings for the subnet or an empty List if no bindings exist.
-   */
-  List<Binding> findAllBySubnetID(String id);
 
 }

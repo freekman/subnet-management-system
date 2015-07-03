@@ -11,17 +11,17 @@ import javax.validation.constraints.Pattern;
  */
 class NewSubnetDTO {
   @NotEmpty
-  public String category;
+  final String nodeId;
   @Pattern(regexp = "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
           message = "IP validation failed.")
-  public final String ip;
+  final String ip;
   @Min(20)
   @Max(32)
-  public final int slash;
-  public final String description;
+  final int slash;
+  final String description;
 
-  public NewSubnetDTO(String category, String ip, int slash, String description) {
-    this.category = category;
+  NewSubnetDTO(String nodeId, String ip, int slash, String description) {
+    this.nodeId = nodeId;
     this.ip = ip;
     this.slash = slash;
     this.description = description;
