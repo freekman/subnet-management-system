@@ -5,22 +5,14 @@
     <h2>Manage categories</h2>
     <hr/>
 
-    <alert ng-repeat="message in messages" type="{{message.type}}" close="closeMessage($index)">{{message.msg}}</alert>
-
-    <form class="navbar-form jumbotron" name="categoryForm">
-        <div>
-            <label>New category</label>
-        </div>
-        <input class="form-control" type="text" placeholder="Enter category"
-               ng-model="category" required>
-        <button class=" form-control btn btn-primary" ng-disabled="!categoryForm.$valid"
-                ng-click="register(category)">
-            Submit
-        </button>
-    </form>
-
     <div class="panel panel-primary">
-        <div class="panel-heading"><b>Categories</b></div>
+        <div class="panel-heading"><b>Categories</b>
+
+            <div class="btn-group btn-group-xs pull-right">
+                <a href="#/category/new" class="btn btn-default btn-xs">Add</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
 
         <table class="table  table-hover">
             <thead>

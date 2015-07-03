@@ -61,7 +61,7 @@ div[data-tree-model] li .selected {
 /* example */
 label {
     display: inline-block;
-    width: 30px;
+    /*width: 30px;*/
     padding: 0 10px;
     font-weight: bold;
 }

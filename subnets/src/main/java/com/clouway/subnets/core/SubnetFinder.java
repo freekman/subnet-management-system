@@ -12,4 +12,6 @@ public interface SubnetFinder {
    */
   List<Subnet> findAll();
 
+  List<Subnet> findAllByParent(String id);
+
 }

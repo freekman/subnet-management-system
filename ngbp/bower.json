@@ -8,5 +8,7 @@
     "angular-bootstrap": "~0.13.0",
     "angular-ui-router": "~0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "angular-modal-service": "~0.6.6"
+  }
 }

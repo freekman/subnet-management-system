@@ -69,6 +69,11 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     return subnetList;
   }
 
+  @Override
+  public List<Subnet> findAllByParent(String id) {
+    return null;
+  }
+
   /**
    * Make a List of Documents with ip and an empty description for all the available IPs.
    *

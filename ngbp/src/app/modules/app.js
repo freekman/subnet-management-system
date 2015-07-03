@@ -21,5 +21,10 @@ app.config(['$stateProvider', '$urlRouterProvider',
               url: '/category',
               templateUrl: 'partials/category.html',
               controller: 'CategoryCtrl'
+            })
+            .state('/category/new', {
+              url: '/category/new',
+              templateUrl: 'partials/new-category.html',
+              controller: 'CategoryRegistryCtrl'
             });
   }]);

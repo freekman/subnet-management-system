@@ -3,62 +3,31 @@
  */
 describe('category', function () {
 
+  var categoryGateway, scope, defer, fetchDefer;
+
   beforeEach(module('category'));
 
+  beforeEach(inject(function ($rootScope, $q) {
+    scope = $rootScope.$new();
+    defer = $q.defer();
+    fetchDefer = $q.defer();
+
+    categoryGateway = {
+      fetchAll: jasmine.createSpy().andReturn(fetchDefer.promise),
+      register: jasmine.createSpy().andReturn(defer.promise),
+      delete: jasmine.createSpy().andReturn(defer.promise)
+    };
+  }));
+
+
   describe('CategoryCtrl', function () {
-    var scope, categoryGateway, messenger, defer, fetchDefer;
 
-    var dummyMessage = ['dummy message'];
-
-    beforeEach(inject(function ($rootScope, $controller, $q) {
-      scope = $rootScope.$new();
-      defer = $q.defer();
-      fetchDefer = $q.defer();
-
-      categoryGateway = {
-        fetchAll: jasmine.createSpy().andReturn(fetchDefer.promise),
-        register: jasmine.createSpy().andReturn(defer.promise),
-        delete: jasmine.createSpy().andReturn(defer.promise)
-      };
-
-      messenger = {
-        success: jasmine.createSpy().andReturn(dummyMessage),
-        fail: jasmine.createSpy().andReturn(dummyMessage)
-      };
-
-      $controller('CategoryCtrl', {$scope: scope, categoryGateway: categoryGateway, messenger: messenger});
+    beforeEach(inject(function ($controller, $rootScope, $q) {
+      $controller('CategoryCtrl', {$scope: scope, categoryGateway: categoryGateway});
     }));
 
     it('should contain no predefined categories', function () {
       expect(scope.categories).toEqual([]);
-    });
-
-    it('should register new category', function () {
-      scope.register('test');
-
-      expect(categoryGateway.register).toHaveBeenCalledWith('test');
-
-      defer.resolve('Registration successful');
-      scope.$digest();
-
-      expect(messenger.success).toHaveBeenCalledWith('Registration successful');
-      expect(categoryGateway.fetchAll).toHaveBeenCalled();
-
-      expect(scope.messages).toEqual(dummyMessage);
-    });
-
-    it('should fail registering category', function () {
-      scope.register('testy');
-
-      expect(categoryGateway.register).toHaveBeenCalledWith('testy');
-
-      defer.reject('Registration failed');
-      scope.$digest();
-
-      expect(messenger.fail).toHaveBeenCalledWith('Registration failed');
-
-      expect(scope.categories).toEqual([]);
-      expect(scope.messages).toEqual(dummyMessage);
     });
 
     it('should fetch all categories', function () {
@@ -85,17 +54,49 @@ describe('category', function () {
       var expected = [internet];
 
       expect(scope.categories).toEqual(expected);
+    });
+
+  });
+
+
+  describe('CategoryRegistryCtrl', function () {
+
+    var categoryRegistryCtrl;
+
+    beforeEach(inject(function ($controller) {
+
+      categoryRegistryCtrl = {register: jasmine.createSpy().andReturn(defer.promise)};
+
+      $controller('CategoryRegistryCtrl', {$scope: scope, categoryRegistryCtrl: categoryGateway});
+    }));
+
+
+    iit('should register new category', function () {
+      scope.register('test');
+
+      expect(categoryGateway.register).toHaveBeenCalledWith('test');
+
+      defer.resolve('Registration successful');
+      scope.$digest();
+
+      expect(messenger.success).toHaveBeenCalledWith('Registration successful');
+      expect(categoryGateway.fetchAll).toHaveBeenCalled();
+
       expect(scope.messages).toEqual(dummyMessage);
     });
 
-    it('should close message', function () {
-      scope.messages = ['First message', 'Second message'];
+    xit('should fail registering category', function () {
+      scope.register('testy');
 
-      scope.closeMessage(0);
+      expect(categoryGateway.register).toHaveBeenCalledWith('testy');
 
-      var expected = ['Second message'];
+      defer.reject('Registration failed');
+      scope.$digest();
 
-      expect(scope.messages).toEqual(expected);
+      expect(messenger.fail).toHaveBeenCalledWith('Registration failed');
+
+      expect(scope.categories).toEqual([]);
+      expect(scope.messages).toEqual(dummyMessage);
     });
 
   });

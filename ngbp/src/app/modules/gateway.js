@@ -1,4 +1,4 @@
-var gateway = angular.module('gateway', ['httpModule', 'message']);
+var gateway = angular.module('gateway', ['httpModule']);
 
 gateway.service('categoryGateway', ['httpRequest', function (httpRequest) {
 
