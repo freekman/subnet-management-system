@@ -12,7 +12,6 @@ registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
 
 registerModule.controller("RegisterCtrl", ["$scope", "subnetGateway", function ($scope, subnetGateway) {
 
-
   $scope.registerSubnet = function (nodeId) {
 
     subnetGateway.register({
