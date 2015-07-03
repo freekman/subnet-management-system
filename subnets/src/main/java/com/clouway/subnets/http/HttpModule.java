@@ -12,8 +12,8 @@ import com.google.sitebricks.SitebricksModule;
 public class HttpModule extends SitebricksModule {
   @Override
   protected void configureSitebricks() {
-    at("/r/category").serve(CategoryService.class);
-    at("/r/subnets").serve(RegisterService.class);
+    at("/r/nodeId").serve(CategoryService.class);
+    at("/r/subnets").serve(SubnetService.class);
 
     bind(CategoryRegistry.class).to(CategoryRegistryImpl.class);
   }

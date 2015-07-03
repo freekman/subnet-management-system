@@ -8,10 +8,10 @@ import java.util.List;
 public interface CategoryRegistry {
 
   /**
-   * Attempt to register new category and return a MessageResponse containing information about the execution of the operation.
+   * Attempt to register new nodeId and return a MessageResponse containing information about the execution of the operation.
    *
-   * @param category new category to be registered if not existing.
-   * @return MessageResponse containing information about successful registration or e already existing category.
+   * @param category new nodeId to be registered if not existing.
+   * @return MessageResponse containing information about successful registration or e already existing nodeId.
    */
   MessageResponse register(NewCategory category);
 
@@ -23,10 +23,10 @@ public interface CategoryRegistry {
   List<Category> findAll();
 
   /**
-   * Deletes a category from the registry.
+   * Deletes a nodeId from the registry.
    *
-   * @param id of category to be deleted.
-   * @return A MessageResponse containing information about the removal of a category.
+   * @param id of nodeId to be deleted.
+   * @return A MessageResponse containing information about the removal of a nodeId.
    */
   MessageResponse delete(String id);
 }

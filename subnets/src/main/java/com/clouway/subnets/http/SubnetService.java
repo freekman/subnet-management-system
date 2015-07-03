@@ -17,14 +17,14 @@ import com.google.sitebricks.http.Post;
 @At("/r/subnets")
 @Service
 @SecureTransport
-public class RegisterService {
+public class SubnetService {
 
   private SubnetRegister register;
   @Inject
-  public RegisterService(SubnetRegister register) {
+  public SubnetService(SubnetRegister register) {
     this.register = register;
   }
-  @At("/new")
+
   @Post
   public Reply<?> register(Request request) {
     NewSubnetDTO dto = request.read(NewSubnetDTO.class).as(Json.class);
@@ -34,6 +34,6 @@ public class RegisterService {
   }
 
   private NewSubnet adapt(NewSubnetDTO dto) {
-    return new NewSubnet(dto.category, dto.ip, dto.slash,dto.description);
+    return new NewSubnet(dto.nodeId, dto.ip, dto.slash,dto.description);
   }
 }

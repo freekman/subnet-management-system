@@ -89,7 +89,7 @@ public class CategoryRegistryImplTest {
 
     MessageResponse response = registry.delete(dummyId);
 
-    assertThat(response.message, is(equalTo("Successfully removed category")));
+    assertThat(response.message, is(equalTo("Successfully removed nodeId")));
 
     assertThat(response.httpStatusCode, is(equalTo(SC_OK)));
   }

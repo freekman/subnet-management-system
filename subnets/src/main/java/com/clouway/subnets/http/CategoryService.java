@@ -24,7 +24,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
 /**
  * @author Marian Zlatev <mzlatev91@gmail.com>
  */
-@At("/r/category")
+@At("/r/nodeId")
 @Service
 class CategoryService {
 

@@ -4,14 +4,14 @@ package com.clouway.subnets.core;
  * Created by ivan.genchev1989@gmail.com.
  */
 public class NewSubnet {
-  public final String category;
+  public final String nodeId;
   public final String subnetIP;
   public final int slash;
   public final String description;
   public static IP ip = new IP();
 
-  public NewSubnet(String category, String subnetIP, int slash, String description) {
-    this.category = category;
+  public NewSubnet(String nodeId, String subnetIP, int slash, String description) {
+    this.nodeId = nodeId;
     this.subnetIP = subnetIP;
     this.slash = slash;
     this.description = description;
@@ -25,7 +25,7 @@ public class NewSubnet {
     NewSubnet newSubnet = (NewSubnet) o;
 
     if (slash != newSubnet.slash) return false;
-    if (category != null ? !category.equals(newSubnet.category) : newSubnet.category != null) return false;
+    if (nodeId != null ? !nodeId.equals(newSubnet.nodeId) : newSubnet.nodeId != null) return false;
     if (subnetIP != null ? !subnetIP.equals(newSubnet.subnetIP) : newSubnet.subnetIP != null) return false;
 
     return true;
@@ -33,7 +33,7 @@ public class NewSubnet {
 
   @Override
   public int hashCode() {
-    int result = category != null ? category.hashCode() : 0;
+    int result = nodeId != null ? nodeId.hashCode() : 0;
     result = 31 * result + (subnetIP != null ? subnetIP.hashCode() : 0);
     result = 31 * result + slash;
     return result;

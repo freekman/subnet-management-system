@@ -9,7 +9,7 @@
         <div class="panel-heading"><b>Categories</b>
 
             <div class="btn-group btn-group-xs pull-right">
-                <a href="#/category/new" class="btn btn-default btn-xs">Add</a>
+                <a href="#/nodeId/new" class="btn btn-default btn-xs">Add</a>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -22,12 +22,12 @@
                 <th>Remove</th>
             </tr>
             </thead>
-            <tbody ng-repeat="category in categories">
+            <tbody ng-repeat="nodeId in categories">
             <tr>
                 <td><b>{{$index +1}}</b></td>
-                <td>{{category.type}}</td>
+                <td>{{nodeId.type}}</td>
                 <td>
-                    <button class="btn btn-default btn-xs" ng-click="delete(category)">x</button>
+                    <button class="btn btn-default btn-xs" ng-click="delete(nodeId)">x</button>
                 </td>
             </tr>
             </tbody>

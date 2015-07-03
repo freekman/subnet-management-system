@@ -2,7 +2,7 @@
 
 <div class="container">
 
-    <h2>New category</h2>
+    <h2>New nodeId</h2>
     <hr/>
 
     <div class="row well">
@@ -10,10 +10,10 @@
         <div class="col-md-6">
             <form class="navbar-form " name="categoryForm">
                 <label>Name</label>
-                <input class="form-control" type="text" placeholder="Enter category"
-                       ng-model="category" required>
+                <input class="form-control" type="text" placeholder="Enter nodeId"
+                       ng-model="nodeId" required>
                 <button class="btn btn-primary" ng-disabled="!categoryForm.$valid"
-                        ng-click="register(category)"> Submit
+                        ng-click="register(nodeId)"> Submit
                 </button>
             </form>
         </div>

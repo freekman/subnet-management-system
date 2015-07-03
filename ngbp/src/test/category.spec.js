@@ -1,7 +1,7 @@
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
-describe('category', function () {
+xdescribe('category', function () {
 
   var categoryGateway, scope, defer, fetchDefer;
 

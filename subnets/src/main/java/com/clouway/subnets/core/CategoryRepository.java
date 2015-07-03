@@ -9,17 +9,17 @@ import java.util.List;
 public interface CategoryRepository {
 
   /**
-   * Register new category.
+   * Register new nodeId.
    *
    * @param category to be registered.
-   * @return the id of the registered category.
+   * @return the id of the registered nodeId.
    */
   String register(NewCategory category);
 
   /**
-   * Deletes a category.
+   * Deletes a nodeId.
    *
-   * @param id of category to be deleted.
+   * @param id of nodeId to be deleted.
    */
   void delete(String id);
 

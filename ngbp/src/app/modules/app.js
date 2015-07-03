@@ -10,11 +10,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
             .state("subnet", {
               url: '/',
               templateUrl: 'partials/subnets.html',
-              controller: 'ManageSubnetCtrl'
-            })
-            .state("newSubnet", {
-              url: '/new/subnet',
-              templateUrl: 'partials/newSubnet.html',
               controller: 'RegisterCtrl'
             })
             .state('/tree', {

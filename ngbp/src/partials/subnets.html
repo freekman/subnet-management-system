@@ -2,7 +2,8 @@
 <div class="row">
     <div class="col-md-3 col-md-offset-8">
         <a href="" class="btn btn-success navbar-right">AddNode</a>
-        <a type="button" class="btn btn-success navbar-right" data-toggle="modal" data-target="#exampleModal">AddSubnet</a>
+        <a type="button" class="btn btn-success navbar-right" data-toggle="modal"
+           data-target="#exampleModal">AddSubnet</a>
 
     </div>
 </div>
@@ -10,7 +11,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">New Subnet</h4>
             </div>
             <div class="modal-body">
@@ -32,14 +34,18 @@
                         </div>
                         <div class="col-md-3" style="margin-top: 25px">
                             <button class="btn btn-success navbar-right "
-                                    ng-click="registerSubnet()" ng-disabled="registerForm.$invalid">
+                                    ng-click="registerSubnet(132)" ng-disabled="registerForm.$invalid">
                                 Register
                             </button>
                         </div>
                     </form>
 
-            </div>
-            <div class="modal-footer">
+                </div>
+                <div class="modal-footer">
+                    <div class="alert alert-success" role="alert" ng-show="responce.length">
+                        {{responce}}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

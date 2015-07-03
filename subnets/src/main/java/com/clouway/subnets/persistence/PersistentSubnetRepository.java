@@ -39,7 +39,7 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     authorizeSubnet(newSubnet);
     Document document = new Document();
     nets().insertOne(document
-            .append("category", newSubnet.category)
+            .append("nodeId", newSubnet.nodeId)
             .append("ip", newSubnet.subnetIP)
             .append("slash", newSubnet.slash)
             .append("description", "")
@@ -60,8 +60,8 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     FindIterable<Document> document = nets().find();
     for (Document doc : document) {
       String id = doc.getObjectId("_id").toString();
-      String category = doc.getString("category");
       String ip = doc.getString("ip");
+      String category = doc.getString("nodeId");
       int slash = doc.getInteger("slash");
       String description = doc.getString("description");
       subnetList.add(new Subnet(id, category, ip, slash, description));

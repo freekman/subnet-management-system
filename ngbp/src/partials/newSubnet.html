@@ -7,7 +7,7 @@
                 <div class="col-md-4">
                     <label for="sel1">Select a group:</label>
                     <select ng-model="selected" class="form-control" id="sel1" required="">
-                        <option ng-repeat="category in categories" value={{category.type}}>{{category.type}}</option>
+                        <option ng-repeat="nodeId in categories" value={{nodeId.type}}>{{nodeId.type}}</option>
                     </select>
                 </div>
                 <div class="col-md-4">

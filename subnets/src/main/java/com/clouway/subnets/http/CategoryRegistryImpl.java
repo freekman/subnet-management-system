@@ -45,7 +45,7 @@ class CategoryRegistryImpl implements CategoryRegistry {
   public MessageResponse delete(String id) {
     repository.delete(id);
 
-    return new MessageResponse("Successfully removed category", SC_OK);
+    return new MessageResponse("Successfully removed nodeId", SC_OK);
   }
 
 }

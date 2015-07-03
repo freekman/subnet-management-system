@@ -17,10 +17,10 @@ import org.junit.Test;
 import static com.clouway.subnets.matchers.ReplyStatus.statusIs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class RegisterServiceTest {
+public class SubnetServiceTest {
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
-  private RegisterService registerService;
+  private SubnetService subnetService;
   private Request request;
   private SubnetRegister register;
 
@@ -28,7 +28,7 @@ public class RegisterServiceTest {
   public void setUp() throws Exception {
     request = context.mock(Request.class);
     register = context.mock(SubnetRegister.class);
-    registerService = new RegisterService(register);
+    subnetService = new SubnetService(register);
   }
 
   @Test
@@ -43,7 +43,7 @@ public class RegisterServiceTest {
       }));
       oneOf(register).register(new NewSubnet("asd", "asd", 1,""));
     }});
-    Reply reply = registerService.register(request);
+    Reply reply = subnetService.register(request);
     assertThat(reply, statusIs(200));
   }
 }
