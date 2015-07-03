@@ -2,8 +2,46 @@
 <div class="row">
     <div class="col-md-3 col-md-offset-8">
         <a href="" class="btn btn-success navbar-right">AddNode</a>
-        <a href="" class="btn btn-success navbar-right">AddSubnet</a>
+        <a type="button" class="btn btn-success navbar-right" data-toggle="modal" data-target="#exampleModal">AddSubnet</a>
+
     </div>
 </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">New Subnet</h4>
+            </div>
+            <div class="modal-body">
 
+                <div class="row">
+
+                    <form name="registerForm">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="in1">Network IP:</label>
+                            <input type="text" class="form-control" id="in1" ng-model="networkIP" name="networkIP"
+                                   required=""/>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="in2">Slash:</label>
+                            <input type="text" class="form-control" id="in2" name="slash" ng-model="slash" required=""/>
+                        </div>
+                        <div class="col-md-3" style="margin-top: 25px">
+                            <button class="btn btn-success navbar-right "
+                                    ng-click="registerSubnet()" ng-disabled="registerForm.$invalid">
+                                Register
+                            </button>
+                        </div>
+                    </form>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="navbar navbar-default navbar-fixed-bottom"></div>
