@@ -1,10 +1,10 @@
 /**
  * Created by clouway on 15-6-15.
  */
-ddescribe("registerModule", function () {
+ddescribe("subnetModule", function () {
   var scope, httpRequest, deffer, gateway;
 
-  beforeEach(module("registerModule"));
+  beforeEach(module("subnetModule"));
 
   beforeEach(module(function ($provide) {
     httpRequest = {
@@ -36,7 +36,7 @@ ddescribe("registerModule", function () {
               gateway = {
                 register: jasmine.createSpy().andReturn(deffer.promise)
               };
-              $controller("RegisterCtrl", {$scope: scope, subnetGateway: gateway});
+              $controller("SubnetCtrl", {$scope: scope, subnetGateway: gateway});
             })
     );
 

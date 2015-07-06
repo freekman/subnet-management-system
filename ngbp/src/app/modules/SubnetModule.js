@@ -1,7 +1,7 @@
 /**
  * Created by clouway on 15-6-15.
  */
-var registerModule = angular.module("registerModule", ['httpModule']);
+var registerModule = angular.module("subnetModule", ['httpModule']);
 
 registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
 
@@ -10,7 +10,7 @@ registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
   };
 }]);
 
-registerModule.controller("RegisterCtrl", ["$scope", "subnetGateway", function ($scope, subnetGateway) {
+registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", function ($scope, subnetGateway) {
 
   $scope.registerSubnet = function (nodeId) {
 

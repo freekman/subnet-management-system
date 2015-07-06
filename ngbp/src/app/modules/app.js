@@ -1,7 +1,7 @@
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
-var app = angular.module('app', ['ui.router', 'httpModule','registerModule', 'treeSubnet', 'category', 'header']);
+var app = angular.module('app', ['ui.router', 'httpModule','subnetModule', 'treeSubnet', 'category', 'header']);
 
 app.config(['$stateProvider', '$urlRouterProvider',
   function ($stateProvider, $urlRouterProvider) {
@@ -10,7 +10,7 @@ app.config(['$stateProvider', '$urlRouterProvider',
             .state("subnet", {
               url: '/',
               templateUrl: 'partials/subnets.html',
-              controller: 'RegisterCtrl'
+              controller: 'SubnetCtrl'
             })
             .state('/tree', {
               url: '/pools',
