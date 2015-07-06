@@ -26855,7 +26855,7 @@ angular.module('treeSubnet', ['angularTreeview', 'gateway']).controller('TreeCtr
   };
 
 }]);
-
+///home/clouway/workspaces/idea/subnet-management-system/ngbp/node_modules/karma/static/karma.js
 function newCategoryNode(category) {
   return {type: 'category', label: category.type, id: category.id, description: '', children: []}
 }
