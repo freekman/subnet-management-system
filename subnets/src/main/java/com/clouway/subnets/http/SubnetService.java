@@ -13,6 +13,7 @@ import com.google.sitebricks.At;
 import com.google.sitebricks.headless.Reply;
 import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Service;
+import com.google.sitebricks.http.Delete;
 import com.google.sitebricks.http.Get;
 import com.google.sitebricks.http.Post;
 
@@ -55,6 +56,14 @@ public class SubnetService {
       return Reply.saying().status(HttpServletResponse.SC_NOT_FOUND);
     }
     return Reply.with(subnet.get()).as(Json.class).ok();
+  }
+
+  @Delete
+  @At("/:id")
+  public Reply<?> removeSubnet(@Named("id") String id) {
+    subnetRegister.remove(id);
+    bindingRegister.removePerSubnet(id);
+    return Reply.saying().ok();
   }
 
   private NewSubnet adapt(NewSubnetDTO dto) {

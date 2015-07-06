@@ -72,9 +72,10 @@ public class SubnetServiceTest {
     }});
 
     Reply reply = subnetService.getSubnetById(id);
-    assertThat(reply,contains(subnet));
-    assertThat(reply,statusIs(200));
+    assertThat(reply, contains(subnet));
+    assertThat(reply, statusIs(200));
   }
+
   @Test
   public void requestedSubnetNotFound() throws Exception {
     final String id = "123456asd";
@@ -85,7 +86,17 @@ public class SubnetServiceTest {
     }});
 
     Reply reply = subnetService.getSubnetById(id);
-    assertThat(reply,statusIs(HttpServletResponse.SC_NOT_FOUND));
+    assertThat(reply, statusIs(HttpServletResponse.SC_NOT_FOUND));
   }
 
+  @Test
+  public void removeSubnet() throws Exception {
+    final String id = "123asdfgh";
+    context.checking(new Expectations() {{
+      oneOf(subnetRegister).remove(id);
+      oneOf(bindingRegister).removePerSubnet(id);
+    }});
+    Reply reply = subnetService.removeSubnet(id);
+    assertThat(reply,statusIs(200));
+  }
 }

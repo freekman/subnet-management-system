@@ -12,4 +12,11 @@ public interface SubnetRegister {
    */
   String register(NewSubnet newSubnet);
 
+  /**
+   * Removes subnet by given ID
+   * Throws IllegalRequestException if subnet not found
+   * @param id
+   */
+  void remove(String id);
+
 }

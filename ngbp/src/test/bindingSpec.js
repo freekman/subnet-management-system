@@ -2,7 +2,7 @@
  * Created by clouway on 15-7-6.
  */
 describe("bindingModule", function () {
-  var httpRequest, bindGateway, scope, deffer, state, stateParams;
+  var httpRequest, bindGateway, scope, deffer, state, stateParams, location;
 
   beforeEach(module("bindingModule"));
 
@@ -50,29 +50,34 @@ describe("bindingModule", function () {
   describe("BindingCtrl", function () {
 
     beforeEach(inject(function ($controller, $rootScope, $q) {
-      scope = $rootScope.$new();
-      deffer = $q.defer();
-      state = {
-        go: jasmine.createSpy()
-      };
-      stateParams = {
-        id: jasmine.createSpy().andReturn("nodeId")
-      };
-      bindGateway = {
-        getSubnetById: jasmine.createSpy().andReturn(deffer.promise),
-        removeSubnetById: jasmine.createSpy().andReturn(deffer.promise),
-        resizeSubnet: jasmine.createSpy().andReturn(deffer.promise),
-        updateDescription: jasmine.createSpy().andReturn(deffer.promise),
-        findBinding: jasmine.createSpy().andReturn(deffer.promise)
-      };
+              scope = $rootScope.$new();
+              deffer = $q.defer();
+              location = {
+                search: jasmine.createSpy().andReturn({"id":"fakeID"})
+              };
+              state = {
+                go: jasmine.createSpy()
+              };
+              stateParams = {
+                id: jasmine.createSpy().andReturn("nodeId")
+              };
+              bindGateway = {
+                getSubnetById: jasmine.createSpy().andReturn(deffer.promise),
+                removeSubnetById: jasmine.createSpy().andReturn(deffer.promise),
+                resizeSubnet: jasmine.createSpy().andReturn(deffer.promise),
+                updateDescription: jasmine.createSpy().andReturn(deffer.promise),
+                findBinding: jasmine.createSpy().andReturn(deffer.promise)
+              };
 
-      $controller("BindingCtrl", {
-        $scope: scope,
-        $stateParams: stateParams,
-        bindingGateway: bindGateway,
-        $state: state
-      });
-    }));
+              $controller("BindingCtrl", {
+                $scope: scope,
+                $stateParams: stateParams,
+                bindingGateway: bindGateway,
+                $location: location,
+                $state: state
+              });
+            })
+    );
 
     it("should get a subnet by id", function () {
       var dummySubnet = {"type": "dummySubnet"};
@@ -89,10 +94,11 @@ describe("bindingModule", function () {
       expect(state.go).toHaveBeenCalledWith("subnet");
     });
 
-    it("shuold remove a subnet", function () {
+    it("shuould remove a subnet", function () {
       scope.removeSubnet();
+      scope.$digest();
 
-      expect(bindGateway.removeSubnetById).toHaveBeenCalledWith(stateParams.id);
+      expect(bindGateway.removeSubnetById).toHaveBeenCalledWith("fakeID");
 
     });
 
@@ -100,7 +106,7 @@ describe("bindingModule", function () {
       scope.resize("29");
       deffer.resolve();
 
-      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith(stateParams.id, {"slash": "29"});
+      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"slash": "29"});
     });
 
     it("shuold not resize a subnet", function () {
@@ -108,7 +114,7 @@ describe("bindingModule", function () {
       deffer.reject("Error");
       scope.$digest();
 
-      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith(stateParams.id, {"slash": "29"});
+      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"slash": "29"});
 
       expect(scope.resizeError).toEqual("Error");
     });
@@ -116,20 +122,11 @@ describe("bindingModule", function () {
     it("should update description", function () {
       scope.updateDescription("TV");
 
-      expect(bindGateway.updateDescription).toHaveBeenCalledWith(stateParams.id, {"text": "TV"})
+      expect(bindGateway.updateDescription).toHaveBeenCalledWith("fakeID", {"text": "TV"})
     });
 
-    it("should find binding", function () {
-      var dummyBinding = {"ip": "0.0.0.0"};
-      var id = {"id": "abc"};
-      scope.findBinding("0.0.0.0", id);
-      deffer.resolve(dummyBinding);
-      scope.$digest();
-
-      expect(bindGateway.findBinding).toHaveBeenCalledWith("0.0.0.0",stateParams.id);
-      expect(scope.binding).toEqual(dummyBinding);
-    });
 
   });
 
-});
+})
+;

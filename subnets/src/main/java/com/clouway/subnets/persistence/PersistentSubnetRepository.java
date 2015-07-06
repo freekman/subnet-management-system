@@ -1,5 +1,6 @@
 package com.clouway.subnets.persistence;
 
+import com.clouway.subnets.core.IllegalRequestException;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
@@ -47,6 +48,15 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
             .append("maxIP", newSubnet.getMaxIP()));
     String id = document.getObjectId("_id").toString();
     return id;
+  }
+
+  @Override
+  public void remove(String id) {
+    try {
+      nets().deleteOne(new Document("_id", new ObjectId(id)));
+    } catch (IllegalArgumentException e) {
+      throw new IllegalRequestException();
+    }
   }
 
   @Override

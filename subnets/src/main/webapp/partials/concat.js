@@ -28892,10 +28892,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
               controller: 'CategoryRegistryCtrl'
             });
   }]);
-/**
- * Created by clouway on 15-7-6.
- */
-
 var binding = angular.module("bindingModule", ["httpModule"]);
 
 binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
@@ -28917,60 +28913,59 @@ binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
   };
 }]);
 
-binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "$state", function ($scope, $stateParams, bindingGateway, $state) {
-  var id;
-  if (id === undefined) {
-    id = $stateParams.id;
-  }
-  console.log(id);
-  //To Remove just for  test.
-  //$scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
-  extractSubnet();
-  console.log($scope.subnet);
+binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "$location","$state",function ($scope, $stateParams, bindingGateway, $location,$state) {
+  var id = getId().id;
 
-  //$scope.updateDescription = function (newDescription) {
-  //
-  //  bindingGateway.updateDescription(id, {"text": newDescription}).then(function () {
-  //
-  //  }, function () {
-  //
-  //  });
-  //};
-  //
-  //$scope.removeSubnet = function () {
-  //  bindingGateway.removeSubnetById(id).then(function () {
-  //    extractSubnet();
-  //  });
-  //};
-  //
-  //$scope.resize = function (newSlash) {
-  //  bindingGateway.resizeSubnet(id, {"slash": newSlash}).then(function () {
-  //    $scope.resizeError = undefined;
-  //    extractSubnet();
-  //  }, function (err) {
-  //    $scope.resizeError = err;
-  //  });
-  //};
-  //
-  //$scope.findBinding = function (bindingIP) {
-  //
-  //  bindingGateway.findBinding(bindingIP,id).then(function (data) {
-  //    $scope.binding = data;
-  //  }, function (error) {
-  //    $scope.bindingError = error;
-  //  });
-  //};
+  //To Remove just for  test.
+  $scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
+
+  extractSubnet();
+
+  $scope.updateDescription = function (newDescription) {
+
+    bindingGateway.updateDescription(id, {"text": newDescription}).then(function () {
+
+    }, function () {
+
+    });
+  };
+  $scope.removeSubnet = function () {
+    bindingGateway.removeSubnetById(id).then(function () {
+      extractSubnet();
+    });
+  };
+
+  $scope.resize = function (newSlash) {
+    bindingGateway.resizeSubnet(id, {"slash": newSlash}).then(function () {
+      $scope.resizeError = undefined;
+      extractSubnet();
+    }, function (err) {
+      $scope.resizeError = err;
+    });
+  };
+
+  $scope.findBinding = function (bindingIP) {
+
+    bindingGateway.findBinding(bindingIP, id).then(function (data) {
+      $scope.binding = data;
+    }, function (error) {
+      $scope.bindingError = error;
+    });
+  };
+
+  function getId() {
+    return $location.search();
+  }
 
   function extractSubnet() {
     bindingGateway.getSubnetById(id)
             .then(function (data) {
               $scope.subnet = data;
             }, function () {
-              //   $state.go("subnet");
+              $state.go("subnet");
             });
   }
 }]);
-
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
@@ -29124,13 +29119,11 @@ registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
   };
 }]);
 
-registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", "$state", function ($scope, subnetGateway, $state) {
+registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", "$location", function ($scope, subnetGateway, $location) {
 
   $scope.handleSubnet = function (id) {
-    console.log(id);
-    $state.go("bindings", {"id": id});
+    $location.path('/bindings').search({"id": id});
   };
-
 
   $scope.registerSubnet = function (nodeId) {
 

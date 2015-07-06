@@ -2,7 +2,7 @@
  * Created by clouway on 15-6-15.
  */
 describe("subnetModule", function () {
-  var scope, httpRequest, deffer, gateway, state;
+  var scope, httpRequest, deffer, gateway, state,location;
 
   beforeEach(module("subnetModule"));
 
@@ -30,16 +30,17 @@ describe("subnetModule", function () {
 
   describe("RegisterCtrl", function () {
 
-    beforeEach(inject(function ($rootScope, $controller, $q) {
+    beforeEach(inject(function ($rootScope, $controller, $q,$location) {
               deffer = $q.defer();
               scope = $rootScope.$new();
+              location=$location;
               state = {
                 go: jasmine.createSpy()
               };
               gateway = {
                 register: jasmine.createSpy().andReturn(deffer.promise)
               };
-              $controller("SubnetCtrl", {$scope: scope, subnetGateway: gateway, $state: state});
+              $controller("SubnetCtrl", {$scope: scope, subnetGateway: gateway, $state: state,$location:location});
             })
     );
 

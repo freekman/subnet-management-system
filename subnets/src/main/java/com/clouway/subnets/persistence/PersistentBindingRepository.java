@@ -10,7 +10,6 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +31,14 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
   }
 
   @Override
+  public void removePerSubnet(String subnetId) {
+    bindings().deleteMany(new Document("subnetId", subnetId));
+  }
+
+  @Override
   public List<Binding> findAllBySubnetID(String id) {
     Document query = new Document()
-            .append("subnetId",id);
+            .append("subnetId", id);
     FindIterable<Document> documents = bindings().find(query);
     return getAllBindings(documents);
   }
