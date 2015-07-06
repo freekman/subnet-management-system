@@ -367,7 +367,8 @@ module.exports = function (grunt) {
      */
     karma: {
       options: {
-        configFile: '<%= build_dir %>/karma-unit.js'
+        configFile: 'karma.conf.js',
+        singleRun: false
       },
       unit: {
         port: 9019,
@@ -429,6 +430,7 @@ module.exports = function (grunt) {
           '<%= html2js.app.dest %>',
           '<%= html2js.common.dest %>',
           '<%= test_files.js %>'
+
         ]
       }
     },
