@@ -20,7 +20,7 @@ do. For example, a top-level route might be "products", which would be a folder
 within the `src/app` directory that conceptually corresponds to the top-level
 route `/products`, though this is in no way enforced. Products may then have
 subdirectories for "create", "view", "search", etc. The "view" submodule may
-then define a route of `/products/:id`, ad infinitum.
+then define a route of `/products/:subnetId`, ad infinitum.
 
 As `ngBoilerplate` is quite minimal, take a look at the two provided submodules
 to gain a better understanding of how these are used as well as to get a

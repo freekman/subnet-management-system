@@ -1,7 +1,7 @@
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
-var app = angular.module('app', ['ui.router', 'httpModule', 'manageSubnetModule','registerModule', 'treeSubnet', 'category', 'header']);
+var app = angular.module('app', ['ui.router', 'httpModule','registerModule', 'treeSubnet', 'category', 'header']);
 
 app.config(['$stateProvider', '$urlRouterProvider',
   function ($stateProvider, $urlRouterProvider) {

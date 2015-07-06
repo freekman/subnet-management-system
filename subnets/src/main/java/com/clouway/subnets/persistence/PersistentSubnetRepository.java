@@ -44,12 +44,8 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
             .append("slash", newSubnet.slash)
             .append("description", "")
             .append("minIP", newSubnet.getMinIP())
-            .append("maxIP", newSubnet.getMaxIP())
-            .append("bindings", ""));
+            .append("maxIP", newSubnet.getMaxIP()));
     String id = document.getObjectId("_id").toString();
-
-    nets().updateOne(new Document("_id", new ObjectId(id)), new Document("$set",
-            new Document("bindings", addAllBindings(newSubnet, id))));
 
     return id;
   }
@@ -74,21 +70,6 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     return null;
   }
 
-  /**
-   * Make a List of Documents with ip and an empty description for all the available IPs.
-   *
-   * @return
-   */
-  private List<Document> addAllBindings(NewSubnet newSubnet, String id) {
-    List<Document> documentList = new ArrayList<>();
-    Long min = newSubnet.getMinIP();
-    Long max = newSubnet.getMaxIP();
-    while (min < max) {
-      documentList.add(new Document().append("ip", IP.getHost(min)).append("description", "").append("_id",id));
-      min++;
-    }
-    return documentList;
-  }
 
   /**
    * * If the new subnet overlaps any other subnet range the method will throw OverlappingSubnetsException .

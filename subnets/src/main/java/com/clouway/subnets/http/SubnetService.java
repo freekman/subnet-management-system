@@ -1,5 +1,6 @@
 package com.clouway.subnets.http;
 
+import com.clouway.subnets.core.BindingRegister;
 import com.clouway.subnets.core.SecureTransport;
 import com.clouway.subnets.core.NewSubnet;
 
@@ -19,17 +20,21 @@ import com.google.sitebricks.http.Post;
 @SecureTransport
 public class SubnetService {
 
-  private SubnetRegister register;
+  private SubnetRegister subnetRegister;
+  private BindingRegister bindingRegister;
+
   @Inject
-  public SubnetService(SubnetRegister register) {
-    this.register = register;
+  public SubnetService(SubnetRegister subnetRegister,BindingRegister bindingRegister) {
+    this.subnetRegister = subnetRegister;
+    this.bindingRegister = bindingRegister;
   }
 
   @Post
   public Reply<?> register(Request request) {
     NewSubnetDTO dto = request.read(NewSubnetDTO.class).as(Json.class);
     NewSubnet newSubnet = adapt(dto);
-    register.register(newSubnet);
+    String id=subnetRegister.register(newSubnet);
+    bindingRegister.registerPerSubnet(newSubnet,id);
     return Reply.with("Registration successful !").status(200);
   }
 

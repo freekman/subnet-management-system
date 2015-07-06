@@ -12,28 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PersistentBindingRepositoryTest {
   private MongoDatabase database;
   private PersistentBindingRepository repository;
-  private PersistentSubnetRepository subnetRepository;
 
   @Before
   public void setUp() throws Exception {
     database = new Fongo("Fake subnet management system").getDatabase("subnets");
     repository = new PersistentBindingRepository(database);
-    subnetRepository = new PersistentSubnetRepository(database);
+
   }
 
   @Test
   public void happyPath() throws Exception {
     NewSubnet newSubnet = new NewSubnet("aaa", "0.0.0.0", 31, "");
-    final String id = subnetRepository.register(newSubnet);
+    final String id = "5597c56acc795e2e35b27102";
+    repository.registerPerSubnet(newSubnet, id);
 
     List<Binding> expected = new ArrayList<Binding>() {{
-      add(new Binding(id, "", "0.0.0.0"));
-      add(new Binding(id, "", "0.0.0.1"));
+      add(new Binding(id, "note", "0.0.0.0"));
+      add(new Binding(id, "note", "0.0.0.1"));
     }};
 
     List<Binding> bindings = repository.findAllBySubnetID(id);

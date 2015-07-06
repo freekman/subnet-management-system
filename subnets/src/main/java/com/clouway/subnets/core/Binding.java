@@ -4,12 +4,12 @@ package com.clouway.subnets.core;
  * Created by ivan.genchev1989@gmail.com.
  */
 public class Binding {
-  private String id;
+  private String subnetId;
   public final String ip;
   public final String description;
 
-  public Binding(String id,String description,String ip) {
-    this.id = id;
+  public Binding(String subnetId,String description,String ip) {
+    this.subnetId = subnetId;
     this.ip = ip;
     this.description = description;
   }
@@ -22,7 +22,7 @@ public class Binding {
     Binding binding = (Binding) o;
 
     if (description != null ? !description.equals(binding.description) : binding.description != null) return false;
-    if (id != null ? !id.equals(binding.id) : binding.id != null) return false;
+    if (subnetId != null ? !subnetId.equals(binding.subnetId) : binding.subnetId != null) return false;
     if (ip != null ? !ip.equals(binding.ip) : binding.ip != null) return false;
 
     return true;
@@ -30,7 +30,7 @@ public class Binding {
 
   @Override
   public int hashCode() {
-    int result = id != null ? id.hashCode() : 0;
+    int result = subnetId != null ? subnetId.hashCode() : 0;
     result = 31 * result + (ip != null ? ip.hashCode() : 0);
     result = 31 * result + (description != null ? description.hashCode() : 0);
     return result;

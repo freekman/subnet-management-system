@@ -1,8 +1,10 @@
 package com.clouway.subnets.persistence;
 
+import com.clouway.subnets.PropertyReader;
+import com.clouway.subnets.core.BindingFinder;
+import com.clouway.subnets.core.BindingRegister;
 import com.clouway.subnets.core.SubnetFinder;
 import com.clouway.subnets.core.SubnetRegister;
-import com.clouway.subnets.PropertyReader;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -22,6 +24,8 @@ public class PersistenceModule extends AbstractModule {
 
   @Override
   protected void configure() {
+    bind(BindingRegister.class).to(PersistentBindingRepository.class);
+    bind(BindingFinder.class).to(PersistentBindingRepository.class);
     bind(SubnetRegister.class).to(PersistentSubnetRepository.class);
     bind(SubnetFinder.class).to(PersistentSubnetRepository.class);
   }
