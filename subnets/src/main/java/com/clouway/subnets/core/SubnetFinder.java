@@ -1,5 +1,7 @@
 package com.clouway.subnets.core;
 
+import com.google.common.base.Optional;
+
 import java.util.List;
 
 /**
@@ -14,4 +16,9 @@ public interface SubnetFinder {
 
   List<Subnet> findAllByParent(String id);
 
+  /**
+   * @param id-subnet id
+   * @return found Subnet
+   */
+  Optional<Subnet> findById(String id);
 }

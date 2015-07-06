@@ -11,9 +11,10 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-public class PersistentNewSubnetRepositoryTest {
+public class PersistentSubnetRepositoryTest {
   private PersistentSubnetRepository repository;
 
   @Before
@@ -26,7 +27,7 @@ public class PersistentNewSubnetRepositoryTest {
   public void registerNewSubnet() throws Exception {
     final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
     String id = repository.register(dummyNewSubnet);
-    List<Subnet> expected = Lists.newArrayList(new Subnet(id, "TV", "0.0.0.0", 31, ""));
+    List<Subnet> expected = Lists.newArrayList(new Subnet(id, "TV", "0.0.0.0", 31, "note"));
     List<Subnet> actual=repository.findAll();
     assertEquals(expected,actual);
   }
@@ -41,6 +42,15 @@ public class PersistentNewSubnetRepositoryTest {
   public void anotherOverlappingSubnet() throws Exception {
     repository.register(new NewSubnet("TV", "0.0.1.0", 31, ""));
     repository.register(new NewSubnet("TV", "0.0.0.0", 21, ""));
+  }
+  @Test
+  public void findById() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
+    String id = repository.register(newSubnet);
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, newSubnet.slash, "note");
+
+    assertThat(subnet, is(actual));
   }
 
 }

@@ -1,11 +1,11 @@
 package com.clouway.subnets.persistence;
 
-import com.clouway.subnets.core.IP;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
 import com.clouway.subnets.core.SubnetFinder;
 import com.clouway.subnets.core.SubnetRegister;
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -42,11 +42,10 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
             .append("nodeId", newSubnet.nodeId)
             .append("ip", newSubnet.subnetIP)
             .append("slash", newSubnet.slash)
-            .append("description", "")
+            .append("description", "note")
             .append("minIP", newSubnet.getMinIP())
             .append("maxIP", newSubnet.getMaxIP()));
     String id = document.getObjectId("_id").toString();
-
     return id;
   }
 
@@ -64,6 +63,12 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     }
     return subnetList;
   }
+
+  @Override
+  public Optional<Subnet> findById(String id) {
+    return getSubnetByID(id);
+  }
+
 
   @Override
   public List<Subnet> findAllByParent(String id) {
@@ -102,6 +107,19 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     return and(
             and(lte("minIP", newSubnet.getMinIP()), gte("maxIP", newSubnet.getMinIP()),
                     and(lte("minIP", newSubnet.getMaxIP()), gte("maxIP", newSubnet.getMaxIP()))));
+  }
+
+  private Optional<Subnet> getSubnetByID(String id) {
+    FindIterable<Document> document = nets().find(new Document("_id", new ObjectId(id)));
+    for (Document doc : document) {
+      String subnetId = doc.getObjectId("_id").toString();
+      String ip = doc.getString("ip");
+      String nodeId = doc.getString("nodeId");
+      int slash = doc.getInteger("slash");
+      String description = doc.getString("description");
+      return Optional.of(new Subnet(subnetId, nodeId, ip, slash, description));
+    }
+    return Optional.absent();
   }
 
   private MongoCollection<Document> nets() {

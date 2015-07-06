@@ -1,7 +1,12 @@
 /**
  * @author Marian Zlatev (mzlatev91@gmail.com)
  */
-var app = angular.module('app', ['ui.router', 'httpModule','subnetModule', 'treeSubnet', 'category', 'header']);
+var app = angular.module('app', ['ui.router', 'httpModule',"bindingModule",'subnetModule', 'treeSubnet', 'category', 'header',"xeditable"]);
+
+app.run(function (editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 
 app.config(['$stateProvider', '$urlRouterProvider',
   function ($stateProvider, $urlRouterProvider) {
@@ -11,6 +16,12 @@ app.config(['$stateProvider', '$urlRouterProvider',
               url: '/',
               templateUrl: 'partials/subnets.html',
               controller: 'SubnetCtrl'
+            })
+            .state("bindings", {
+              url: '/bindings',
+              templateUrl: 'partials/bindings.html',
+              params: {"id": ""},
+              controller: 'BindingCtrl'
             })
             .state('/tree', {
               url: '/pools',

@@ -1,8 +1,8 @@
 /**
  * Created by clouway on 15-6-15.
  */
-ddescribe("subnetModule", function () {
-  var scope, httpRequest, deffer, gateway;
+describe("subnetModule", function () {
+  var scope, httpRequest, deffer, gateway, state;
 
   beforeEach(module("subnetModule"));
 
@@ -33,10 +33,13 @@ ddescribe("subnetModule", function () {
     beforeEach(inject(function ($rootScope, $controller, $q) {
               deffer = $q.defer();
               scope = $rootScope.$new();
+              state = {
+                go: jasmine.createSpy()
+              };
               gateway = {
                 register: jasmine.createSpy().andReturn(deffer.promise)
               };
-              $controller("SubnetCtrl", {$scope: scope, subnetGateway: gateway});
+              $controller("SubnetCtrl", {$scope: scope, subnetGateway: gateway, $state: state});
             })
     );
 
@@ -44,13 +47,13 @@ ddescribe("subnetModule", function () {
     it("should register subnet", function () {
       var dummyObj = {"type": "Success"};
       scope.networkIP = "0.0.0.0";
-      scope.slash="23";
+      scope.slash = "23";
 
       scope.registerSubnet("132");
 
       deffer.resolve(dummyObj);
 
-      expect(gateway.register).toHaveBeenCalledWith({ ip : '0.0.0.0', nodeId : '132', slash : '23' } );
+      expect(gateway.register).toHaveBeenCalledWith({ip: '0.0.0.0', nodeId: '132', slash: '23'});
 
     });
 

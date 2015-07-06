@@ -10,7 +10,13 @@ registerModule.service("subnetGateway", ["httpRequest", function (httpRequest) {
   };
 }]);
 
-registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", function ($scope, subnetGateway) {
+registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", "$state", function ($scope, subnetGateway, $state) {
+
+  $scope.handleSubnet = function (id) {
+    console.log(id);
+    $state.go("bindings", {"id": id});
+  };
+
 
   $scope.registerSubnet = function (nodeId) {
 
@@ -21,7 +27,7 @@ registerModule.controller("SubnetCtrl", ["$scope", "subnetGateway", function ($s
     }).then(function (data) {
       $scope.responce = data;
     }, function (error) {
-      $scope.responce= error;
+      $scope.responce = error;
     });
   }
 }]);

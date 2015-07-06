@@ -27,9 +27,9 @@ public class Subnet {
     Subnet subnet = (Subnet) o;
 
     if (slash != subnet.slash) return false;
-    if (nodeId != null ? !nodeId.equals(subnet.nodeId) : subnet.nodeId != null) return false;
     if (description != null ? !description.equals(subnet.description) : subnet.description != null) return false;
     if (id != null ? !id.equals(subnet.id) : subnet.id != null) return false;
+    if (nodeId != null ? !nodeId.equals(subnet.nodeId) : subnet.nodeId != null) return false;
     if (subnetIP != null ? !subnetIP.equals(subnet.subnetIP) : subnet.subnetIP != null) return false;
 
     return true;

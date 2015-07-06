@@ -177,6 +177,7 @@ module.exports = function (grunt) {
       build_css: {
         src: [
           'vendor/bootstrap/dist/css/bootstrap.css',
+          'vendor/angular-xeditable/dist/css/xeditable.css',
           'src/app/treeview.css'
         ],
         dest: 'src/partials/concat.css'
@@ -185,6 +186,7 @@ module.exports = function (grunt) {
         src: [
           'vendor/angular/angular.js',
           'vendor/angular-ui-router/release/angular-ui-router.js',
+          'vendor/angular-xeditable/dist/js/xeditable.js',
           'src/app/modules/*',
           'vendor/jquery/dist/jquery.js',
           'vendor/bootstrap/dist/js/bootstrap.js'
