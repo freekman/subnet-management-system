@@ -5,3 +5,20 @@
 </div>
 
 <div class="navbar navbar-default navbar-fixed-bottom"></div>
+
+    <div class="abn-tree-container">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left top-buffer"><b>Network Nodes</b></h4>
+                <div class="pull-right">
+                    <a href="" data-toggle="modal" ng-click="registerNode()" class="glyphicon glyphicon-plus"></a>
+                    <a href="" ng-show="selectedBranch" class="glyphicon glyphicon-edit"></a>
+                    <a href="" ng-click="deleteNode()" ng-show="!selectedBranch.noLeaf" class="glyphicon glyphicon-remove"></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <abn-tree tree-data="networkNodes" on-select="onNodeSelect(branch,parent)"
+                          on-expand=onNodeExpand(branch)></abn-tree>
+            </div>
+        </div>
+    </div>

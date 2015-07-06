@@ -27,6 +27,8 @@ public class TransportInterceptor implements MethodInterceptor {
       return Reply.with("Subnet is taken!").status(SC_BAD_REQUEST);
     }catch (OverlappingSubnetException e){
       return Reply.with("Subnet range is overlapping!").status(SC_BAD_REQUEST);
+    }catch (NetworkNodeException e){
+      return Reply.with(e.getMessage()).status(400);
     }
   }
 }

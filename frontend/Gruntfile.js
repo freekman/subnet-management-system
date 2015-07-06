@@ -176,8 +176,10 @@ module.exports = function (grunt) {
        */
       build_css: {
         src: [
+          'src/app/subnet.css',
           'vendor/bootstrap/dist/css/bootstrap.css',
-          'src/app/subnet.css'
+          'vendor/angular-xeditable/dist/css/xeditable.css',
+          'src/app/abn_tree.css'
         ],
         dest: 'src/partials/concat.css'
       },
@@ -186,6 +188,7 @@ module.exports = function (grunt) {
           'vendor/angular/angular.js',
           'vendor/angular-ui-router/release/angular-ui-router.js',
           'src/app/modules/*',
+          'vendor/angular-xeditable/dist/js/xeditable.js',
           'vendor/jquery/dist/jquery.js',
           'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
           'vendor/bootstrap/dist/js/bootstrap.js'

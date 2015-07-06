@@ -1,0 +1,31 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <span class="close glyphicon glyphicon-remove" ng-click="cancel()"></span>
+        <h4 class="modal-title">New node</h4>
+    </div>
+    <div class="modal-body">
+        <p>Add node to <label class="label label-info" ng-bind="selectedBranch.label"/></p>
+
+        <form name="form">
+            <div class="form-group">
+                <label class="contrzol-label">Name:
+                    <input type="text" ng-model="nodeName" class="form-control" required>
+                </label>
+            </div>
+        </form>
+        Node type
+        <a href="#" editable-select="selectedType" e-ng-options="type as type for type in nodeTypes">
+            {{selectedType}}
+        </a>
+
+        <div class="alert alert-info" ng-show="message">
+            {{message}}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="submit(nodeName)"
+                ng-disabled="form.$invalid">Register
+        </button>
+    </div>
+</div>

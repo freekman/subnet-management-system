@@ -1,7 +1,7 @@
 {
   "author": "Josh David Miller",
-  "name": "ngbp",
-  "version": "0.3.2",
+  "name": "subnets",
+  "version": "0.1.0",
   "homepage": "https://github.com/ngbp/ngbp",
   "licenses": {
     "type": "MIT",
