@@ -82,6 +82,7 @@ public class SubnetService {
     return Reply.saying().ok();
   }
 
+
   private Slash adapt(SlashDTO dto) {
     return new Slash(dto.value);
   }

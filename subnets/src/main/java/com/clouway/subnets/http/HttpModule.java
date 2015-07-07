@@ -12,6 +12,7 @@ public class HttpModule extends SitebricksModule {
   @Override
   protected void configureSitebricks() {
     at("/r/subnets").serve(SubnetService.class);
+    at("/r/bindings").serve(BindingService.class);
   }
   
   

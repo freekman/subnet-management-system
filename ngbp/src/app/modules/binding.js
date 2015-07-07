@@ -14,14 +14,13 @@ binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
   this.updateDescription = function (id, description) {
     return httpRequest.send("PUT", "/r/subnets/" + id + "/description", description);
   };
-  this.findBinding = function (id, ip) {
-    return httpRequest.send("GET", "/r/bindings/" + id, ip);
+  this.findBinding = function (id, bindingIP) {
+    return httpRequest.send("POST", "/r/bindings/" + id, bindingIP);
   };
 }]);
 
-binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "$location","$state",function ($scope, $stateParams, bindingGateway, $location,$state) {
+binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "$location", "$state", function ($scope, $stateParams, bindingGateway, $location, $state) {
   var id = getId().id;
-
   //To Remove just for  test.
   $scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
 
@@ -53,9 +52,11 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
 
   $scope.findBinding = function (bindingIP) {
 
-    bindingGateway.findBinding(bindingIP, id).then(function (data) {
+    bindingGateway.findBinding(id, {"value": bindingIP}).then(function (data) {
       $scope.binding = data;
     }, function (error) {
+      console.log("dsfsfdsfdsfs");
+      //$scope.binding = {"ip":"0.0.0.0","description":"note"};
       $scope.bindingError = error;
     });
   };

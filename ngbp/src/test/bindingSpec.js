@@ -41,7 +41,7 @@ describe("bindingModule", function () {
 
     it("should make a request for subnet binging", function () {
       bindGateway.findBinding( "abc","0.0.0.0");
-      expect(httpRequest.send).toHaveBeenCalledWith('GET', '/r/bindings/abc', "0.0.0.0");
+      expect(httpRequest.send).toHaveBeenCalledWith('POST', '/r/bindings/abc', "0.0.0.0");
     });
 
   });

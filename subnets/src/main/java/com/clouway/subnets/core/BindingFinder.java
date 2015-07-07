@@ -1,5 +1,7 @@
 package com.clouway.subnets.core;
 
+import com.google.common.base.Optional;
+
 import java.util.List;
 
 /**
@@ -13,4 +15,5 @@ public interface BindingFinder {
    */
   List<Binding> findAllBySubnetID(String id);
 
+  Optional<Binding> findByIP(String subnetId,String ip);
 }

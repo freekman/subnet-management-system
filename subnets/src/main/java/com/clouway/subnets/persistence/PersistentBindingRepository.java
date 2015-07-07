@@ -7,6 +7,7 @@ import com.clouway.subnets.core.IP;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.Slash;
 import com.clouway.subnets.core.Subnet;
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -58,6 +59,20 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
             .append("subnetId", id);
     FindIterable<Document> documents = bindings().find(query);
     return getAllBindings(documents);
+  }
+
+  @Override
+  public Optional<Binding> findByIP(String subnetId, String ip) {
+
+      FindIterable<Document> document = bindings().find(and(eq("subnetId", subnetId), eq("ip", ip))).limit(1);
+      for (Document doc : document) {
+        String subNetId = doc.getString("subnetId");
+        String bindingIp = doc.getString("ip");
+        String description = doc.getString("description");
+        return Optional.of(new Binding(subNetId, description, bindingIp));
+      }
+
+    return Optional.absent();
   }
 
   /**
