@@ -35,6 +35,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
 
     });
   };
+
   $scope.removeSubnet = function () {
     bindingGateway.removeSubnetById(id).then(function () {
       extractSubnet();

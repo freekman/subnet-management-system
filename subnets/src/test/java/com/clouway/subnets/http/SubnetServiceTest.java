@@ -1,6 +1,7 @@
 package com.clouway.subnets.http;
 
 import com.clouway.subnets.core.BindingRegister;
+import com.clouway.subnets.core.Message;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.Subnet;
 import com.clouway.subnets.core.SubnetFinder;
@@ -97,6 +98,25 @@ public class SubnetServiceTest {
       oneOf(bindingRegister).removePerSubnet(id);
     }});
     Reply reply = subnetService.removeSubnet(id);
+    assertThat(reply, statusIs(200));
+  }
+
+  @Test
+  public void changeDescriptionPerSubnet() throws Exception {
+    final String id = "abc";
+    final Message message = new Message("newDescription");
+
+    context.checking(new Expectations() {{
+      oneOf(request).read(MessageDTO.class);
+      will(returnValue(new RequestRead<MessageDTO>() {
+        @Override
+        public MessageDTO as(Class<? extends Transport> transport) {
+          return new MessageDTO("newDescription");
+        }
+      }));
+      oneOf(subnetRegister).updateDescription(id, message);
+    }});
+    Reply reply = subnetService.updateDescription(id, request);
     assertThat(reply,statusIs(200));
   }
 }

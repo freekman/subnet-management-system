@@ -1,6 +1,7 @@
 package com.clouway.subnets.persistence;
 
 import com.clouway.subnets.core.IllegalRequestException;
+import com.clouway.subnets.core.Message;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
@@ -68,6 +69,19 @@ public class PersistentSubnetRepositoryTest {
   @Test(expected = IllegalRequestException.class)
   public void removeNotExistingSubnet() throws Exception {
     repository.remove("a3424324bc");
+  }
+
+  @Test
+  public void updateDescription() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
+    String id = repository.register(newSubnet);
+
+    repository.updateDescription(id,new Message("TV"));
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, newSubnet.slash, "TV");
+
+    assertThat(subnet, is(actual));
   }
 
 }

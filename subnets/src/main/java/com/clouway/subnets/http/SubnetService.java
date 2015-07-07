@@ -1,6 +1,7 @@
 package com.clouway.subnets.http;
 
 import com.clouway.subnets.core.BindingRegister;
+import com.clouway.subnets.core.Message;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.SecureTransport;
 import com.clouway.subnets.core.Subnet;
@@ -16,6 +17,7 @@ import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Delete;
 import com.google.sitebricks.http.Get;
 import com.google.sitebricks.http.Post;
+import com.google.sitebricks.http.Put;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -64,6 +66,19 @@ public class SubnetService {
     subnetRegister.remove(id);
     bindingRegister.removePerSubnet(id);
     return Reply.saying().ok();
+  }
+
+  @Put
+  @At("/:id/description")
+  public Reply<?> updateDescription(@Named("id") String id, Request request) {
+    MessageDTO messageDTO = request.read(MessageDTO.class).as(Json.class);
+    Message message = adapt(messageDTO);
+    subnetRegister.updateDescription(id, message);
+    return Reply.saying().ok();
+  }
+
+  private Message adapt(MessageDTO messageDTO) {
+    return new Message(messageDTO.text);
   }
 
   private NewSubnet adapt(NewSubnetDTO dto) {

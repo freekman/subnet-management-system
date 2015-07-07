@@ -20,7 +20,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
             .state("bindings", {
               url: '/bindings',
               templateUrl: 'partials/bindings.html',
-              params: {"id": ""},
               controller: 'BindingCtrl'
             })
             .state('/tree', {

@@ -1,6 +1,7 @@
 package com.clouway.subnets.persistence;
 
 import com.clouway.subnets.core.IllegalRequestException;
+import com.clouway.subnets.core.Message;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
@@ -57,6 +58,11 @@ class PersistentSubnetRepository implements SubnetRegister, SubnetFinder {
     } catch (IllegalArgumentException e) {
       throw new IllegalRequestException();
     }
+  }
+
+  @Override
+  public void updateDescription(String id, Message message) {
+    nets().updateOne(new Document("_id", new ObjectId(id)), new Document("$set", new Document("description", message.text)));
   }
 
   @Override
