@@ -1,18 +1,13 @@
 package com.clouway.subnets.persistence;
 
-import com.clouway.subnets.core.Binding;
-import com.clouway.subnets.core.BindingFinder;
-import com.clouway.subnets.core.BindingRegister;
-import com.clouway.subnets.core.IP;
-import com.clouway.subnets.core.NewSubnet;
-import com.clouway.subnets.core.Slash;
-import com.clouway.subnets.core.Subnet;
+import com.clouway.subnets.core.*;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +49,12 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
   }
 
   @Override
+  public void updateDescription(String id, Message message) {
+    bindings().updateOne(new Document("_id", new ObjectId(id)), new Document("$set", new Document("description", message.text)));
+
+  }
+
+  @Override
   public List<Binding> findAllBySubnetID(String id) {
     Document query = new Document()
             .append("subnetId", id);
@@ -62,15 +63,16 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
   }
 
   @Override
-  public Optional<Binding> findByIP(String subnetId, String ip) {
+  public Optional<BindingWithId> findByIP(String subnetId, String ip) {
 
-      FindIterable<Document> document = bindings().find(and(eq("subnetId", subnetId), eq("ip", ip))).limit(1);
-      for (Document doc : document) {
-        String subNetId = doc.getString("subnetId");
-        String bindingIp = doc.getString("ip");
-        String description = doc.getString("description");
-        return Optional.of(new Binding(subNetId, description, bindingIp));
-      }
+    FindIterable<Document> document = bindings().find(and(eq("subnetId", subnetId), eq("ip", ip))).limit(1);
+    for (Document doc : document) {
+      String id = doc.getObjectId("_id").toString();
+      String subNetId = doc.getString("subnetId");
+      String bindingIp = doc.getString("ip");
+      String description = doc.getString("description");
+      return Optional.of(new BindingWithId(id,bindingIp,subNetId, description));
+    }
 
     return Optional.absent();
   }
@@ -98,10 +100,10 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
   private List<Binding> getAllBindings(FindIterable<Document> documents) {
     List<Binding> bindings = new ArrayList<>();
     for (Document document : documents) {
-      String id = document.getString("subnetId");
+      String subnetId = document.getString("subnetId");
       String ip = (String) document.get("ip");
       String description = (String) document.get("description");
-      bindings.add(new Binding(id, description, ip));
+      bindings.add(new Binding(subnetId, description, ip));
     }
     return bindings;
   }

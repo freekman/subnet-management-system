@@ -76,7 +76,6 @@ public class SubnetService {
     SlashDTO dto = request.read(SlashDTO.class).as(Json.class);
     Slash slash = adapt(dto);
     Subnet subnet = subnetFinder.findById(id).get();
-
     subnetRegister.resize(id, slash);
     bindingRegister.resizePerSubnet(subnet, slash);
     return Reply.saying().ok();

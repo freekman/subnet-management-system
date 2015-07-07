@@ -1,24 +1,27 @@
 package com.clouway.subnets.persistence;
 
 import com.clouway.subnets.core.Binding;
-import com.clouway.subnets.core.IllegalRequestException;
+import com.clouway.subnets.core.BindingWithId;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.Slash;
 import com.clouway.subnets.core.Subnet;
 import com.github.fakemongo.Fongo;
 import com.google.common.base.Optional;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PersistentBindingRepositoryTest {
   private MongoDatabase database;
@@ -96,20 +99,32 @@ public class PersistentBindingRepositoryTest {
     NewSubnet newSubnet = new NewSubnet("aaa", "0.0.0.0", 31, "");
     final String id = "5597c56acc795e2e35b27102";
     repository.registerPerSubnet(newSubnet, id);
-    Binding binding = repository.findByIP(id, "0.0.0.0").get();
-    Binding actual = new Binding(id, "note", "0.0.0.0");
 
-    assertThat(binding,is(actual));
+    BindingWithId binding = repository.findByIP(id, "0.0.0.0").get();
+
+    String bindingID=getBindingId(id,"0.0.0.0");
+    BindingWithId actual = new BindingWithId(bindingID,"0.0.0.0",id, "note");
+
+    assertThat(binding, is(actual));
   }
+
+
   @Test
-  public void findBindingByIP2() throws Exception {
+  public void findBindingByAnotherIP() throws Exception {
     NewSubnet newSubnet = new NewSubnet("aaa", "0.0.0.0", 31, "");
     final String id = "5597c56acc795e2e35b27102";
     repository.registerPerSubnet(newSubnet, id);
-    Optional<Binding> optional=repository.findByIP(id, "10.2.5.5");
+    Optional<BindingWithId> optional = repository.findByIP(id, "10.2.5.5");
 
     assertTrue(!optional.isPresent());
   }
 
+  private String getBindingId(String subnetId, String ip) {
+    FindIterable<Document> documents = database.getCollection("bindings").find(and(eq("subnetId", subnetId), eq("ip", ip))).limit(1);
+    for (Document doc : documents) {
+      return doc.getObjectId("_id").toString();
+    }
+    return null;
+  }
 
 }

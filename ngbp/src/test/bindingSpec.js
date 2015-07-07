@@ -35,13 +35,18 @@ describe("bindingModule", function () {
     });
 
     it("should make a request to update  subnet description", function () {
-      bindGateway.updateDescription("abc", "TV");
+      bindGateway.updateSubnetDescription("abc", "TV");
       expect(httpRequest.send).toHaveBeenCalledWith('PUT', '/r/subnets/abc/description', "TV");
     });
 
     it("should make a request for subnet binging", function () {
       bindGateway.findBinding( "abc","0.0.0.0");
       expect(httpRequest.send).toHaveBeenCalledWith('POST', '/r/bindings/abc', "0.0.0.0");
+    });
+
+    it("should make a request to update  binding description", function () {
+      bindGateway.updateBindingDescription("abc", "TV");
+      expect(httpRequest.send).toHaveBeenCalledWith('PUT', '/r/bindings/abc/description', "TV");
     });
 
   });
@@ -64,7 +69,8 @@ describe("bindingModule", function () {
                 getSubnetById: jasmine.createSpy().andReturn(deffer.promise),
                 removeSubnetById: jasmine.createSpy().andReturn(deffer.promise),
                 resizeSubnet: jasmine.createSpy().andReturn(deffer.promise),
-                updateDescription: jasmine.createSpy().andReturn(deffer.promise),
+                updateSubnetDescription: jasmine.createSpy().andReturn(deffer.promise),
+                updateBindingDescription: jasmine.createSpy().andReturn(deffer.promise),
                 findBinding: jasmine.createSpy().andReturn(deffer.promise)
               };
 
@@ -118,12 +124,17 @@ describe("bindingModule", function () {
       expect(scope.resizeError).toEqual("Error");
     });
 
-    it("should update description", function () {
-      scope.updateDescription("TV");
+    it("should update subnet description", function () {
+      scope.updateSubnetDescription("TV");
 
-      expect(bindGateway.updateDescription).toHaveBeenCalledWith("fakeID", {"text": "TV"})
+      expect(bindGateway.updateSubnetDescription).toHaveBeenCalledWith("fakeID", {"text": "TV"})
     });
 
+    it("should update binding description", function () {
+      scope.updateBindingDescription("TV");
+
+      expect(bindGateway.updateBindingDescription).toHaveBeenCalledWith("fakeID", {"text": "TV"})
+    });
 
   });
 

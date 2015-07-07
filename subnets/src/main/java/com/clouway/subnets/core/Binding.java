@@ -22,8 +22,8 @@ public class Binding {
     Binding binding = (Binding) o;
 
     if (description != null ? !description.equals(binding.description) : binding.description != null) return false;
-    if (subnetId != null ? !subnetId.equals(binding.subnetId) : binding.subnetId != null) return false;
     if (ip != null ? !ip.equals(binding.ip) : binding.ip != null) return false;
+    if (subnetId != null ? !subnetId.equals(binding.subnetId) : binding.subnetId != null) return false;
 
     return true;
   }

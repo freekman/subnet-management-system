@@ -15,5 +15,5 @@ public interface BindingFinder {
    */
   List<Binding> findAllBySubnetID(String id);
 
-  Optional<Binding> findByIP(String subnetId,String ip);
+  Optional<BindingWithId> findByIP(String subnetId,String ip);
 }

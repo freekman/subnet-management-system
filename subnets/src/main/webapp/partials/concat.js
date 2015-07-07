@@ -28904,8 +28904,11 @@ binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
   this.resizeSubnet = function (id, newSlash) {
     return httpRequest.send("PUT", "/r/subnets/" + id + "/resize", newSlash);
   };
-  this.updateDescription = function (id, description) {
+  this.updateSubnetDescription = function (id, description) {
     return httpRequest.send("PUT", "/r/subnets/" + id + "/description", description);
+  };
+  this.updateBindingDescription = function (id, description) {
+    return httpRequest.send("PUT", "/r/bindings/" + id + "/description", description);
   };
   this.findBinding = function (id, bindingIP) {
     return httpRequest.send("POST", "/r/bindings/" + id, bindingIP);
@@ -28919,13 +28922,14 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
 
   extractSubnet();
 
-  $scope.updateDescription = function (newDescription) {
+  $scope.updateSubnetDescription = function (newDescription) {
 
-    bindingGateway.updateDescription(id, {"text": newDescription}).then(function () {
+    bindingGateway.updateSubnetDescription(id, {"text": newDescription})
+  };
 
-    }, function () {
+  $scope.updateBindingDescription = function (newDescription) {
 
-    });
+    bindingGateway.updateBindingDescription($scope.binding.id, {"text": newDescription});
   };
 
   $scope.removeSubnet = function () {
@@ -28948,8 +28952,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
     bindingGateway.findBinding(id, {"value": bindingIP}).then(function (data) {
       $scope.binding = data;
     }, function (error) {
-      console.log("dsfsfdsfdsfs");
-      //$scope.binding = {"ip":"0.0.0.0","description":"note"};
+      $scope.binding = undefined;
       $scope.bindingError = error;
     });
   };
@@ -28963,7 +28966,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
             .then(function (data) {
               $scope.subnet = data;
             }, function () {
-              //$state.go("subnet");
+              $state.go("subnet");
             });
   }
 }]);

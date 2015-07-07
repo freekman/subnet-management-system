@@ -2,6 +2,7 @@ package com.clouway.subnets.http;
 
 import com.clouway.subnets.core.Binding;
 import com.clouway.subnets.core.BindingFinder;
+import com.clouway.subnets.core.BindingRegister;
 import com.google.common.base.Optional;
 import com.google.sitebricks.client.Transport;
 import com.google.sitebricks.headless.Reply;
@@ -25,20 +26,23 @@ public class BindingServiceTest {
 
   private BindingService bindingService;
   private BindingFinder bindingFinder;
+  private BindingRegister bindingRegister;
   private Request request;
 
   @Before
   public void setUp() throws Exception {
     request = context.mock(Request.class);
+    bindingRegister = context.mock(BindingRegister.class);
     bindingFinder = context.mock(BindingFinder.class);
-    bindingService = new BindingService(bindingFinder);
+    bindingService = new BindingService(bindingFinder,bindingRegister);
   }
 
   @Test
   public void provideSubnetByIP() throws Exception {
-    final String id = "abc";
+
+    final String subnetId = "abc";
     final String ip = "0.0.0.0";
-    final Binding binding = new Binding(id, "note", ip);
+    final Binding binding = new Binding(subnetId, "note", ip);
 
     context.checking(new Expectations() {{
       oneOf(request).read(BindingIpDTO.class);
@@ -48,14 +52,15 @@ public class BindingServiceTest {
           return new BindingIpDTO(ip);
         }
       }));
-      oneOf(bindingFinder).findByIP(id, ip);
+      oneOf(bindingFinder).findByIP(subnetId, ip);
       will(returnValue(Optional.of(binding)));
     }});
 
-    Reply reply = bindingService.getBinding(id, request);
-    assertThat(reply,contains(binding));
-    assertThat(reply,statusIs(200));
+    Reply reply = bindingService.getBinding(subnetId, request);
+    assertThat(reply, contains(binding));
+    assertThat(reply, statusIs(200));
   }
+
   @Test
   public void subnetNotFound() throws Exception {
     final String id = "abc";
@@ -74,7 +79,7 @@ public class BindingServiceTest {
     }});
 
     Reply reply = bindingService.getBinding(id, request);
-    assertThat(reply,statusIs(HttpServletResponse.SC_NOT_FOUND));
+    assertThat(reply, statusIs(HttpServletResponse.SC_NOT_FOUND));
   }
 
 }

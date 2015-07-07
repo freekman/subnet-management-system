@@ -20,5 +20,18 @@ public interface BindingRegister {
    */
   void removePerSubnet(String subnetId);
 
+  /**
+   * Given the subnet and the new slash the bindings will be resized
+   * @param subnet
+   * @param newSlash
+   */
   void resizePerSubnet(Subnet subnet,Slash newSlash);
+
+  /**
+   * Update the old description (by default the subnet description is note)
+   *
+   * @param id-the          subnet id
+   * @param message-message obj containing the new message
+   */
+  void updateDescription(String id, Message message);
 }
