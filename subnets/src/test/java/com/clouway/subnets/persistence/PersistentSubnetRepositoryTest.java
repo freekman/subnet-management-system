@@ -4,6 +4,7 @@ import com.clouway.subnets.core.IllegalRequestException;
 import com.clouway.subnets.core.Message;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
+import com.clouway.subnets.core.Slash;
 import com.clouway.subnets.core.Subnet;
 import com.github.fakemongo.Fongo;
 import com.google.common.base.Optional;
@@ -31,8 +32,8 @@ public class PersistentSubnetRepositoryTest {
     final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
     String id = repository.register(dummyNewSubnet);
     List<Subnet> expected = Lists.newArrayList(new Subnet(id, "TV", "0.0.0.0", 31, "note"));
-    List<Subnet> actual=repository.findAll();
-    assertEquals(expected,actual);
+    List<Subnet> actual = repository.findAll();
+    assertEquals(expected, actual);
   }
 
   @Test(expected = OverlappingSubnetException.class)
@@ -46,6 +47,7 @@ public class PersistentSubnetRepositoryTest {
     repository.register(new NewSubnet("TV", "0.0.1.0", 31, ""));
     repository.register(new NewSubnet("TV", "0.0.0.0", 21, ""));
   }
+
   @Test
   public void findById() throws Exception {
     NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
@@ -76,12 +78,55 @@ public class PersistentSubnetRepositoryTest {
     NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
     String id = repository.register(newSubnet);
 
-    repository.updateDescription(id,new Message("TV"));
+    repository.updateDescription(id, new Message("TV"));
 
     Subnet subnet = repository.findById(id).get();
     Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, newSubnet.slash, "TV");
 
     assertThat(subnet, is(actual));
+  }
+
+  @Test
+  public void findNewSubnet() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
+    NewSubnet expected = new NewSubnet("nodeId", "10.1.2.0", 23, "note");
+    String id = repository.register(newSubnet);
+    NewSubnet actual = repository.findSubnetById(id).get();
+
+    assertThat(actual,is(expected));
+  }
+
+  @Test
+  public void resizeToSmallerSubnet() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
+    String id = repository.register(newSubnet);
+
+    repository.resize(id,new Slash(25));
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP,25, "note");
+    assertThat(subnet, is(actual));
+  }
+
+  @Test
+  public void resizeToBiggerSubnet() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "10.1.2.0", 23, "");
+    String id = repository.register(newSubnet);
+
+    repository.resize(id,new Slash(21));
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP,21, "note");
+    assertThat(subnet, is(actual));
+  }
+  @Test(expected = OverlappingSubnetException.class)
+  public void anotherResizeToBiggerSubnet() throws Exception {
+    NewSubnet newSubnetOne = new NewSubnet("nodeId", "0.0.0.0", 30, "");
+    NewSubnet newSubnetTwo = new NewSubnet("nodeId", "0.0.0.25", 30, "");
+
+    String idOne = repository.register(newSubnetOne);
+    String idTwo = repository.register(newSubnetTwo);
+    repository.resize(idOne,new Slash(22));
   }
 
 }

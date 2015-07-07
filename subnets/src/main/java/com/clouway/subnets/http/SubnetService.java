@@ -1,12 +1,6 @@
 package com.clouway.subnets.http;
 
-import com.clouway.subnets.core.BindingRegister;
-import com.clouway.subnets.core.Message;
-import com.clouway.subnets.core.NewSubnet;
-import com.clouway.subnets.core.SecureTransport;
-import com.clouway.subnets.core.Subnet;
-import com.clouway.subnets.core.SubnetFinder;
-import com.clouway.subnets.core.SubnetRegister;
+import com.clouway.subnets.core.*;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -53,7 +47,6 @@ public class SubnetService {
   @At("/:id")
   public Reply<?> getSubnetById(@Named("id") String id) {
     Optional<Subnet> subnet = subnetFinder.findById(id);
-
     if (!subnet.isPresent()) {
       return Reply.saying().status(HttpServletResponse.SC_NOT_FOUND);
     }
@@ -75,6 +68,22 @@ public class SubnetService {
     Message message = adapt(messageDTO);
     subnetRegister.updateDescription(id, message);
     return Reply.saying().ok();
+  }
+
+  @Put
+  @At("/:id/resize")
+  public Reply<?> resizeSubnet(@Named("id") String id, Request request) {
+    SlashDTO dto = request.read(SlashDTO.class).as(Json.class);
+    Slash slash = adapt(dto);
+    Subnet subnet = subnetFinder.findById(id).get();
+
+    subnetRegister.resize(id, slash);
+    bindingRegister.resizePerSubnet(subnet, slash);
+    return Reply.saying().ok();
+  }
+
+  private Slash adapt(SlashDTO dto) {
+    return new Slash(dto.value);
   }
 
   private Message adapt(MessageDTO messageDTO) {

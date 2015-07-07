@@ -28873,7 +28873,6 @@ app.config(['$stateProvider', '$urlRouterProvider',
             .state("bindings", {
               url: '/bindings',
               templateUrl: 'partials/bindings.html',
-              params: {"id": ""},
               controller: 'BindingCtrl'
             })
             .state('/tree', {
@@ -28929,6 +28928,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
 
     });
   };
+
   $scope.removeSubnet = function () {
     bindingGateway.removeSubnetById(id).then(function () {
       extractSubnet();
@@ -28936,7 +28936,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
   };
 
   $scope.resize = function (newSlash) {
-    bindingGateway.resizeSubnet(id, {"slash": newSlash}).then(function () {
+    bindingGateway.resizeSubnet(id, {"value": newSlash}).then(function () {
       $scope.resizeError = undefined;
       extractSubnet();
     }, function (err) {

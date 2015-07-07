@@ -14,8 +14,8 @@ binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
   this.updateDescription = function (id, description) {
     return httpRequest.send("PUT", "/r/subnets/" + id + "/description", description);
   };
-  this.findBinding = function (ip, id) {
-    return httpRequest.send("GET", "/r/bindings/" + ip, id);
+  this.findBinding = function (id, ip) {
+    return httpRequest.send("GET", "/r/bindings/" + id, ip);
   };
 }]);
 
@@ -43,7 +43,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
   };
 
   $scope.resize = function (newSlash) {
-    bindingGateway.resizeSubnet(id, {"slash": newSlash}).then(function () {
+    bindingGateway.resizeSubnet(id, {"value": newSlash}).then(function () {
       $scope.resizeError = undefined;
       extractSubnet();
     }, function (err) {

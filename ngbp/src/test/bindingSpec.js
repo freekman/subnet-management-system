@@ -40,10 +40,9 @@ describe("bindingModule", function () {
     });
 
     it("should make a request for subnet binging", function () {
-      bindGateway.findBinding("0.0.0.0", "abc");
-      expect(httpRequest.send).toHaveBeenCalledWith('GET', '/r/bindings/0.0.0.0', "abc");
+      bindGateway.findBinding( "abc","0.0.0.0");
+      expect(httpRequest.send).toHaveBeenCalledWith('GET', '/r/bindings/abc', "0.0.0.0");
     });
-
 
   });
 
@@ -106,7 +105,7 @@ describe("bindingModule", function () {
       scope.resize("29");
       deffer.resolve();
 
-      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"slash": "29"});
+      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"value": "29"});
     });
 
     it("shuold not resize a subnet", function () {
@@ -114,7 +113,7 @@ describe("bindingModule", function () {
       deffer.reject("Error");
       scope.$digest();
 
-      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"slash": "29"});
+      expect(bindGateway.resizeSubnet).toHaveBeenCalledWith("fakeID", {"value": "29"});
 
       expect(scope.resizeError).toEqual("Error");
     });

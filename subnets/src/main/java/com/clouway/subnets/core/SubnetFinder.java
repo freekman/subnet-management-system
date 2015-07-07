@@ -21,4 +21,11 @@ public interface SubnetFinder {
    * @return found Subnet
    */
   Optional<Subnet> findById(String id);
+
+  /**
+   * @param id-subnet id
+   * @return NewSubnet
+   */
+  Optional<NewSubnet> findSubnetById(String id);
+
 }
