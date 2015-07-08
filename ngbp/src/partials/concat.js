@@ -28919,14 +28919,12 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
   var id = getId().id;
   //To Remove just for  test.
   $scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
+  //$scope.binding = {"ip": "0.0.0.0", "description": "note"};
 
   extractSubnet();
 
   $scope.updateSubnetDescription = function (newDescription) {
-
-    bindingGateway.updateSubnetDescription(id, {"text": newDescription}).then(function () {
-      //$scope.findBinding($scope.binding.ip);
-    })
+    bindingGateway.updateSubnetDescription(id, {"text": newDescription})
   };
 
   $scope.updateBindingDescription = function (newDescription) {
@@ -28952,6 +28950,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
   $scope.findBinding = function (bindingIP) {
 
     bindingGateway.findBinding(id, {"value": bindingIP}).then(function (data) {
+      $scope.bindingError = undefined;
       $scope.binding = data;
     }, function (error) {
       $scope.binding = undefined;
@@ -28968,7 +28967,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
             .then(function (data) {
               $scope.subnet = data;
             }, function () {
-              $state.go("subnet");
+              // $state.go("subnet");
             });
   }
 }]);

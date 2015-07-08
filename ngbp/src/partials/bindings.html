@@ -1,88 +1,123 @@
 <nets-header active-url="/"></nets-header>
-
 <div class="container">
     <div class="jumbotron">
         <div class="row">
-            <div class="col-md-3"><h3>{{subnet.subnetIP}}/{{subnet.slash}}</h3></div>
             <div class="col-md-4">
-                <a href="#" editable-text="subnet.description" onaftersave="updateSubnetDescription(subnet.description)">
-                    {{subnet.description || 'empty' }}
-                </a>
-            </div>
-            <div class="col-md-4">
-                <form name="formResize">
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" name="x" ng-model="newSlash"/>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Subnet
                     </div>
-                    <button class="btn btn-primary" ng-click="resize(newSlash)">
-                        Resize
-                    </button>
-                </form>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-8">
+                                <h3>{{subnet.subnetIP}}/{{subnet.slash}}</h3>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 10px;">
+                                <button class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"
+                                          ng-click="removeSubnet()"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-6">
+                                    <p class="text-primary">Description</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10">
+                                    <a href="#" editable-text="subnet.description"
+                                       onaftersave="updateSubnetDescription(subnet.description)">
+                                        {{subnet.description || 'empty' }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-11">
+                                <form name="formResize">
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control" name="x" ng-model="newSlash"/>
+                                    </div>
+                                    <button class="btn btn-primary" ng-click="resize(newSlash)">
+                                        Resize
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-1">
-                <button class="btn btn-primary">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeSubnet()"></span>
-                </button>
-            </div>
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        Bindings
+                    </div>
+                    <div class="panel-body">
 
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" ng-model="bindingIP"/>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" ng-click="findBinding(bindingIP)">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row" ng-show="binding.ip.length">
+
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr class="row">
+                                    <td class="col-md-1">
+                                    </td>
+                                    <td class="col-md-2">
+                                        <label for="p1">Binding</label>
+
+                                        <p id="p1">
+                                            {{binding.ip}}
+                                        </p>
+                                    </td>
+                                    <td class="col-md-2">
+                                    </td>
+                                    <td class="col-md-7">
+                                        <div class="col-md-5" style="margin-top: 25px">
+                                            <span class="title">Description: </span>
+                                                <span editable-text="binding.description" e-name="name"
+                                                      onaftersave="updateBindingDescription(binding.description)"
+                                                      e-required>{{ binding.description || 'empty' }}
+                                                </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-        <div class="alert alert-danger" role="alert" ng-show="resizeError.length">{{resizeError}}</div>
-    </div>
-    <div class="col-md-4"></div>
-
-</div>
-
-
-<div class="container">
-    <div class="jumbotron">
         <div class="row">
-            <div class="col-md-3">
-                <input type="text" class="form-control" ng-model="bindingIP"/>
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert" ng-show="resizeError.length || bindingError.length">
+                    <span class="glyphicon glyphicon-fire" aria-hidden="true"></span> {{resizeError}}{{bindingError}}
+                </div>
             </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary" ng-click="findBinding(bindingIP)">
-                    <span class="glyphicon glyphicon-search" aria-hidden="true" ></span>
-                </button>
-            </div>
-            <div class="col-md-2"></div>
-
-        </div>
-        <hr/>
-        <div class="row" ng-show="binding.ip.length">
-            <table class="table table-hover">
-                <tbody>
-                <tr class="row">
-                    <td class="col-md-2">
-
-                        <label for="p1">Binding</label>
-
-                        <p id="p1">
-                            {{binding.ip}}-{{binding.description}}
-                        </p>
-                    </td>
-                    <td class="col-md-2">
-                    </td>
-                    <td class="col-md-6">
-                        <div class="col-md-2">
-                        </div>
-                        <div class="col-md-5" style="margin-top: 25px">
-                            <span class="title">Click to change: </span>
-                            <span editable-text="binding.description" e-name="name" onaftersave="updateBindingDescription(binding.description)" e-required>{{ binding.description || 'empty' }}</span>
-
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
-
 
 <div class="navbar navbar-default navbar-fixed-bottom"></div>
