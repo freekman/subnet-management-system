@@ -25,7 +25,7 @@ binding.service("bindingGateway", ["httpRequest", function (httpRequest) {
 binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "$location", "$state", function ($scope, $stateParams, bindingGateway, $location, $state) {
   var id = getId().id;
   //To Remove just for  test.
-  $scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
+  //$scope.subnet = {"subnetIP": "0.0.0.0", "slash": "30", "description": "note"};
   //$scope.binding = {"ip": "0.0.0.0", "description": "note"};
 
   extractSubnet();
@@ -74,7 +74,7 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
             .then(function (data) {
               $scope.subnet = data;
             }, function () {
-              // $state.go("subnet");
+               $state.go("subnet");
             });
   }
 }]);

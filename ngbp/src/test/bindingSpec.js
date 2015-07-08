@@ -40,7 +40,7 @@ describe("bindingModule", function () {
     });
 
     it("should make a request for subnet binging", function () {
-      bindGateway.findBinding( "abc","0.0.0.0");
+      bindGateway.findBinding("abc", "0.0.0.0");
       expect(httpRequest.send).toHaveBeenCalledWith('POST', '/r/bindings/abc', "0.0.0.0");
     });
 
@@ -57,7 +57,7 @@ describe("bindingModule", function () {
               scope = $rootScope.$new();
               deffer = $q.defer();
               location = {
-                search: jasmine.createSpy().andReturn({"id":"fakeID"})
+                search: jasmine.createSpy().andReturn({"id": "fakeID"})
               };
               state = {
                 go: jasmine.createSpy()
@@ -131,6 +131,9 @@ describe("bindingModule", function () {
     });
 
     it("should update binding description", function () {
+      scope.binding={id:"fakeID"};
+      scope.$digest();
+
       scope.updateBindingDescription("TV");
 
       expect(bindGateway.updateBindingDescription).toHaveBeenCalledWith("fakeID", {"text": "TV"})
