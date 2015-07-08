@@ -28924,11 +28924,13 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
 
   $scope.updateSubnetDescription = function (newDescription) {
 
-    bindingGateway.updateSubnetDescription(id, {"text": newDescription})
+    bindingGateway.updateSubnetDescription(id, {"text": newDescription}).then(function () {
+      //$scope.findBinding($scope.binding.ip);
+    })
   };
 
   $scope.updateBindingDescription = function (newDescription) {
-
+    console.log(newDescription);
     bindingGateway.updateBindingDescription($scope.binding.id, {"text": newDescription});
   };
 

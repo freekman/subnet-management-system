@@ -60,21 +60,21 @@
                 <tr class="row">
                     <td class="col-md-2">
 
-                        <label for="p1">Subnet</label>
+                        <label for="p1">Binding</label>
 
                         <p id="p1">
                             {{binding.ip}}-{{binding.description}}
                         </p>
                     </td>
-                    <td class="col-md-1">
+                    <td class="col-md-2">
                     </td>
-                    <td class="col-md-7">
-                        <div class="col-md-4">
+                    <td class="col-md-6">
+                        <div class="col-md-2">
                         </div>
-                        <div class="col-md-3" style="margin-top: 25px">
-                            <a href="#" editable-text="subnet.description" onaftersave="updateBindingDescription(subnet.description)">
-                                {{binding.description || 'empty' }}
-                            </a>
+                        <div class="col-md-5" style="margin-top: 25px">
+                            <span class="title">Click to change: </span>
+                            <span editable-text="binding.description" e-name="name" onaftersave="updateBindingDescription(binding.description)" e-required>{{ binding.description || 'empty' }}</span>
+
                         </div>
                     </td>
                 </tr>

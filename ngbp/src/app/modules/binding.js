@@ -30,12 +30,11 @@ binding.controller("BindingCtrl", ["$scope", "$stateParams", "bindingGateway", "
   extractSubnet();
 
   $scope.updateSubnetDescription = function (newDescription) {
-
     bindingGateway.updateSubnetDescription(id, {"text": newDescription})
   };
 
   $scope.updateBindingDescription = function (newDescription) {
-
+    console.log(newDescription);
     bindingGateway.updateBindingDescription($scope.binding.id, {"text": newDescription});
   };
 
