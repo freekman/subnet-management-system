@@ -52,19 +52,10 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
     }
   }
 
-
   @Override
   public void updateDescription(String id, Message message) {
     bindings().updateOne(new Document("_id", new ObjectId(id)), new Document("$set", new Document("description", message.text)));
 
-  }
-
-  @Override
-  public List<Binding> findAllBySubnetID(String id) {
-    Document query = new Document()
-            .append("subnetId", id);
-    FindIterable<Document> documents = bindings().find(query);
-    return getAllBindings(documents);
   }
 
   @Override
@@ -84,7 +75,6 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
 
   /**
    * Calculates how many bindings to insert without copying existing ones so a new Resized subnet will be complete-this is done to save the existing bindings
-   *
    * @param id-the        mongo id for the subnet
    * @param oldSubnet-the subnet before the refactoring
    */
@@ -101,22 +91,10 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
 
     bindings().deleteMany(bson);
   }
-
-  private List<Binding> getAllBindings(FindIterable<Document> documents) {
-    List<Binding> bindings = new ArrayList<>();
-    for (Document document : documents) {
-      String subnetId = document.getString("subnetId");
-      String ip = (String) document.get("ip");
-      String description = (String) document.get("description");
-      bindings.add(new Binding(subnetId, description, ip));
-    }
-    return bindings;
-  }
-
   /**
-   * Make a List of Documents with ip and an empty description for all the available IPs.
-   *
-   * @return
+   * Make a List of Documents with bindings if no oldSubnet is provided the function will make a list only for the newSubnet,
+   * if a oldSubnet is provided then bindings will be provided to the oldSubnet to become like the newSubnet with the deference
+   * That this way the old bindings are preserved.
    */
   private List<Document> allBindings(NewSubnet newSubnet, NewSubnet oldSubnet, String id) {
     List<Document> documentList = new ArrayList<>();

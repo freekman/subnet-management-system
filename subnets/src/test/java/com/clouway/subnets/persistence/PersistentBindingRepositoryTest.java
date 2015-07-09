@@ -45,7 +45,7 @@ public class PersistentBindingRepositoryTest {
       add(new Binding(id, "note", "0.0.0.1"));
     }};
 
-    List<Binding> bindings = repository.findAllBySubnetID(id);
+    List<Binding> bindings = findAllBySubnetID(id);
     Assert.assertThat(bindings, is(expected));
   }
 
@@ -55,7 +55,7 @@ public class PersistentBindingRepositoryTest {
     final String id = "5597c56acc795e2e35b27102";
     repository.registerPerSubnet(newSubnet, id);
     repository.removePerSubnet(id);
-    List<Binding> bindings = repository.findAllBySubnetID(id);
+    List<Binding> bindings = findAllBySubnetID(id);
 
     assertThat(bindings.size(), is(0));
   }
@@ -72,7 +72,7 @@ public class PersistentBindingRepositoryTest {
       add(new Binding(id, "note", "3.3.3.3"));
     }};
 
-    List<Binding> bindings = repository.findAllBySubnetID(id);
+    List<Binding> bindings = findAllBySubnetID(id);
     Assert.assertThat(bindings, is(expected));
   }
 
@@ -91,7 +91,7 @@ public class PersistentBindingRepositoryTest {
       add(new Binding(id, "note", "3.3.3.1"));
     }};
 
-    List<Binding> bindings = repository.findAllBySubnetID(id);
+    List<Binding> bindings = findAllBySubnetID(id);
     Assert.assertThat(bindings, is(expected));
   }
 
@@ -113,7 +113,7 @@ public class PersistentBindingRepositoryTest {
       add(new Binding(id, "note", "3.3.3.7"));
     }};
 
-    List<Binding> bindings = repository.findAllBySubnetID(id);
+    List<Binding> bindings =findAllBySubnetID(id);
     Assert.assertThat(bindings, is(expected));
   }
 
@@ -151,4 +151,21 @@ public class PersistentBindingRepositoryTest {
     return null;
   }
 
+  public List<Binding> findAllBySubnetID(String id) {
+    Document query = new Document()
+            .append("subnetId", id);
+    FindIterable<Document> documents = database.getCollection("bindings").find(query);
+    return getAllBindings(documents);
+  }
+
+  private List<Binding> getAllBindings(FindIterable<Document> documents) {
+    List<Binding> bindings = new ArrayList<>();
+    for (Document document : documents) {
+      String subnetId = document.getString("subnetId");
+      String ip = (String) document.get("ip");
+      String description = (String) document.get("description");
+      bindings.add(new Binding(subnetId, description, ip));
+    }
+    return bindings;
+  }
 }
