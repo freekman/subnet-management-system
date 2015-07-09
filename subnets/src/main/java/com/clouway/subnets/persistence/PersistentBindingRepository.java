@@ -7,6 +7,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.gte;
+import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.or;
 
 /**
  * Created by ivan.genchev1989@gmail.com.
@@ -41,11 +44,33 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
   public void resizePerSubnet(Subnet subnet, Slash newSlash) {
     NewSubnet oldSubnet = adapt(subnet, subnet.slash);
     NewSubnet newSubnet = adapt(subnet, newSlash.value);
-    if (Long.compare(oldSubnet.getMaxIP(), newSubnet.getMaxIP()) > 0) {
-      resizeToSmallerSubnet(subnet, newSubnet);
-    } else if (Long.compare(oldSubnet.getMaxIP(), newSubnet.getMaxIP()) < 0) {
+
+    if (oldSubnet.slash < newSubnet.slash) {
+      removeOverlappingBindings(subnet.id, newSubnet);
+    } else if (oldSubnet.slash > newSubnet.slash) {
       resizeToBiggerSubnet(subnet.id, oldSubnet, newSubnet.slash);
     }
+  }
+  /**
+   * Calculates how many bindings to insert without copying existing ones so a new Resized subnet will be complete-this is done to save the existing bindings
+   *
+   * @param id-the        mongo id for the subnet
+   * @param oldSubnet-the subnet before the refactoring
+   * @param newSlash      - integer for the new slash
+   */
+  private void resizeToBiggerSubnet(String id, NewSubnet oldSubnet, int newSlash) {
+    NewSubnet resized = new NewSubnet(oldSubnet.nodeId, IP.getHost(oldSubnet.getMaxIP()), newSlash, "");
+    List<Document> documents = allBindings(resized, oldSubnet, id);
+    bindings().insertMany(documents);
+  }
+
+  /**
+   * Removes the overlapping bindings
+   */
+  private void removeOverlappingBindings(String id, NewSubnet newSubnet) {
+    Bson bson=or(and(eq("subnetId",id),gt("position", newSubnet.getMaxIP())),and(eq("subnetId", id),lt("position", newSubnet.getMinIP())));
+
+    bindings().deleteMany(bson);
   }
 
   @Override
@@ -71,31 +96,14 @@ class PersistentBindingRepository implements BindingRegister, BindingFinder {
       String subNetId = doc.getString("subnetId");
       String bindingIp = doc.getString("ip");
       String description = doc.getString("description");
-      return Optional.of(new BindingWithId(id,bindingIp,subNetId, description));
+      return Optional.of(new BindingWithId(id, bindingIp, subNetId, description));
     }
 
     return Optional.absent();
   }
 
-  /**
-   * Calculates how many bindings to insert without copying existing ones so a new Resized subnet will be complete-this is done to save the existing bindings
-   *
-   * @param id-the        mongo id for the subnet
-   * @param oldSubnet-the subnet before the refactoring
-   * @param newSlash      - integer for the new slash
-   */
-  private void resizeToBiggerSubnet(String id, NewSubnet oldSubnet, int newSlash) {
-    NewSubnet resized = new NewSubnet(oldSubnet.nodeId, IP.getHost(oldSubnet.getMaxIP()), newSlash, "");
-    List<Document> documents = allBindings(resized, oldSubnet, id);
-    bindings().insertMany(documents);
-  }
 
-  /**
-   * Removes the overlapping bindings
-   */
-  private void resizeToSmallerSubnet(Subnet subnet, NewSubnet newSubnet) {
-    bindings().deleteMany(and(eq("subnetId", subnet.id), gte("position", newSubnet.getMaxIP())));
-  }
+
 
   private List<Binding> getAllBindings(FindIterable<Document> documents) {
     List<Binding> bindings = new ArrayList<>();
