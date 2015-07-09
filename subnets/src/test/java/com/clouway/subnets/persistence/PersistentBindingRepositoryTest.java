@@ -85,15 +85,38 @@ public class PersistentBindingRepositoryTest {
     repository.resizePerSubnet(new Subnet(id, "aaa", "3.3.3.3", 31, ""), new Slash(30));
 
     List<Binding> expected = new ArrayList<Binding>() {{
-      add(new Binding(id, "note", "3.3.3.0"));
-      add(new Binding(id, "note", "3.3.3.1"));
       add(new Binding(id, "note", "3.3.3.2"));
       add(new Binding(id, "note", "3.3.3.3"));
+      add(new Binding(id, "note", "3.3.3.0"));
+      add(new Binding(id, "note", "3.3.3.1"));
     }};
 
     List<Binding> bindings = repository.findAllBySubnetID(id);
     Assert.assertThat(bindings, is(expected));
   }
+
+  @Test
+  public void resizeFromBothEnds() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("aaa", "3.3.3.3", 31, "");
+    final String id = "5597c56acc795e2e35b27102";
+    repository.registerPerSubnet(newSubnet, id);
+    repository.resizePerSubnet(new Subnet(id, "aaa", "3.3.3.3", 31, ""), new Slash(29));
+
+    List<Binding> expected = new ArrayList<Binding>() {{
+      add(new Binding(id, "note", "3.3.3.2"));
+      add(new Binding(id, "note", "3.3.3.3"));
+      add(new Binding(id, "note", "3.3.3.0"));
+      add(new Binding(id, "note", "3.3.3.1"));
+      add(new Binding(id, "note", "3.3.3.4"));
+      add(new Binding(id, "note", "3.3.3.5"));
+      add(new Binding(id, "note", "3.3.3.6"));
+      add(new Binding(id, "note", "3.3.3.7"));
+    }};
+
+    List<Binding> bindings = repository.findAllBySubnetID(id);
+    Assert.assertThat(bindings, is(expected));
+  }
+
 
   @Test
   public void findBindingByIP() throws Exception {
