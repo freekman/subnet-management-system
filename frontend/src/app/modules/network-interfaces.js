@@ -54,6 +54,7 @@ angular.module("networkInterfaces", ['http', 'tree', 'xeditable', 'ui.bootstrap'
               animation: true,
               templateUrl: 'partials/new-node.html',
               controller: 'NewNodeCtrl',
+              backdrop: false,
               resolve: {
                 tree: function () {
                   return {root: $scope.networkNodes, branch: $scope.selectedBranch};
@@ -112,7 +113,7 @@ angular.module("networkInterfaces", ['http', 'tree', 'xeditable', 'ui.bootstrap'
 
           $scope.selectedBranch = tree.branch;
           $scope.root = tree.root;
-          $scope.selectedType = 'child';
+          $scope.selectedType = 'root';
           $scope.nodeTypes = ['child', 'root'];
 
           $scope.submit = function (name) {

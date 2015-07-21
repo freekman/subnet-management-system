@@ -4,6 +4,7 @@ import com.clouway.subnets.core.NetworkNode;
 import com.clouway.subnets.core.NetworkNodeFinder;
 import com.clouway.subnets.core.NetworkNodeStore;
 import com.clouway.subnets.core.NewNetworkNode;
+import com.clouway.subnets.core.SecureTransport;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.sitebricks.At;
@@ -25,6 +26,7 @@ import static javax.servlet.http.HttpServletResponse.SC_OK;
  */
 @At("/r/nodes")
 @Service
+@SecureTransport
 class NetworkNodeService {
 
   private final NetworkNodeStore store;
