@@ -4,11 +4,11 @@ package com.clouway.subnets.core;
  * Created by ivan.genchev1989@gmail.com.
  */
 public class Subnet {
-  private String id;
-  private final String nodeId;
-  private final String subnetIP;
-  private final int slash;
-  private final String description;
+  public final String id;
+  public final String nodeId;
+  public final String subnetIP;
+  public final int slash;
+  public final String description;
 
 
   public Subnet(String id,String nodeId, String subnetIP, int slash, String description) {

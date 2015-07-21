@@ -1,3 +1,7 @@
+<!--To remove -this simulates the tree final node that a client can click to go to the subnet managment page-->
+<a href="" ng-click="navigateToSubnetManager('55ae549ecc795e4833c4510a')">Fake Subnet -0.0.0.0/30</a>
+<br/>
+<!---->
 <div class="row">
     <div class="col-md-3 col-md-offset-8">
         <a type="button" class="btn btn-primary navbar-right" ng-click="add()" ng-show="selectedBranch">AddSubnet</a>
@@ -6,19 +10,21 @@
 
 <div class="navbar navbar-default navbar-fixed-bottom"></div>
 
-    <div class="abn-tree-container">
-        <div class="panel panel-default">
-            <div class="panel-heading clearfix">
-                <h4 class="panel-title pull-left top-buffer"><b>Network Nodes</b></h4>
-                <div class="pull-right">
-                    <a href="" data-toggle="modal" ng-click="registerNode()" class="glyphicon glyphicon-plus"></a>
-                    <a href="" ng-show="selectedBranch" class="glyphicon glyphicon-edit"></a>
-                    <a href="" ng-click="deleteNode()" ng-show="!selectedBranch.noLeaf" class="glyphicon glyphicon-remove"></a>
-                </div>
-            </div>
-            <div class="panel-body">
-                <abn-tree tree-data="networkNodes" on-select="onNodeSelect(branch,parent)"
-                          on-expand=onNodeExpand(branch)></abn-tree>
+<div class="abn-tree-container">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left top-buffer"><b>Network Nodes</b></h4>
+
+            <div class="pull-right">
+                <a href="" data-toggle="modal" ng-click="registerNode()" class="glyphicon glyphicon-plus"></a>
+                <a href="" ng-show="selectedBranch" class="glyphicon glyphicon-edit"></a>
+                <a href="" ng-click="deleteNode()" ng-show="!selectedBranch.noLeaf"
+                   class="glyphicon glyphicon-remove"></a>
             </div>
         </div>
+        <div class="panel-body">
+            <abn-tree tree-data="networkNodes" on-select="onNodeSelect(branch,parent)"
+                      on-expand=onNodeExpand(branch)></abn-tree>
+        </div>
     </div>
+</div>

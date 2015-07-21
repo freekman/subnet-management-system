@@ -30,6 +30,13 @@ describe("networkInterfaces", function () {
       expect(promise).toEqual({promise: "DummyPromise"});
     });
 
+    it("should get subnet by id", function () {
+      var promise = gateway.getById("abc");
+
+      expect(httpRequest.send).toHaveBeenCalledWith('GET', '/r/subnets/abc');
+      expect(promise).toEqual({promise: "DummyPromise"});
+    });
+
   });
 
   describe('nodeGateway', function () {
@@ -74,7 +81,7 @@ describe("networkInterfaces", function () {
   });
 
   describe("NetworkCtrl", function () {
-    var scope, modal, nodeGateway, subGateway, defer, modalDefer, networkDeffer;
+    var scope, modal, nodeGateway, subGateway, defer, modalDefer, networkDeffer, location, search;
 
     beforeEach(inject(function ($rootScope, $controller, $q) {
       scope = $rootScope.$new();
@@ -86,6 +93,18 @@ describe("networkInterfaces", function () {
 
       subGateway = {register: jasmine.createSpy().andReturn(defer.promise)};
 
+      search = {
+        search: jasmine.createSpy()
+      };
+
+      location = {
+        path: function (url) {
+          return search;
+        }
+      };
+
+      spyOn(location, 'path').andCallThrough();
+
       nodeGateway = {
         fetchAllByParent: jasmine.createSpy().andReturn(networkDeffer.promise),
         register: jasmine.createSpy().andReturn(defer.promise),
@@ -95,6 +114,7 @@ describe("networkInterfaces", function () {
       $controller("NetworkCtrl", {
         $scope: scope,
         $modal: modal,
+        $location: location,
         subnetGateway: subGateway,
         nodeGateway: nodeGateway
       });
@@ -106,6 +126,13 @@ describe("networkInterfaces", function () {
       scope.add();
 
       expect(modal.open).toHaveBeenCalled();
+    });
+
+    it("should relocate to subnet manager", function () {
+      scope.navigateToSubnetManager("subnetID");
+
+      expect(location.path).toHaveBeenCalledWith('/subnet/manager');
+      expect(search.search).toHaveBeenCalledWith({id: 'subnetID'});
     });
 
     it('should init networkNodes', function () {
@@ -246,7 +273,7 @@ describe("networkInterfaces", function () {
     it('should init scope data', function () {
       expect(scope.selectedBranch).toEqual('dummyBranch');
       expect(scope.root).toEqual('dummyRoot');
-      expect(scope.selectedType).toEqual('child');
+      expect(scope.selectedType).toEqual('root');
       expect(scope.nodeTypes).toEqual(['child', 'root']);
     });
 
@@ -290,4 +317,5 @@ describe("networkInterfaces", function () {
 
   });
 
-});
+})
+;

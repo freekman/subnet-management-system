@@ -5,6 +5,7 @@ import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
 import com.clouway.subnets.core.SubnetFinder;
 import com.clouway.subnets.core.SubnetStore;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mongodb.client.FindIterable;
@@ -12,11 +13,13 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gte;
 import static com.mongodb.client.model.Filters.lte;
 import static com.mongodb.client.model.Filters.or;
@@ -48,7 +51,7 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
     nets().insertOne(subnet);
     String id = subnet.getObjectId("_id").toString();
 
-    bindings().insertMany(bindings(id,newSubnet));
+    bindings().insertMany(bindings(id, newSubnet));
 
     return id;
   }
@@ -75,11 +78,21 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
     return null;
   }
 
+  @Override
+  public Optional<Subnet> findById(String id) {
+    Document document = nets().find(eq("_id", new ObjectId(id))).first();
+    if (document != null) {
+
+      return adapt(id, document);
+    }
+
+    return Optional.absent();
+  }
 
   /**
    * * If the new subnet overlaps any other subnet range the method will throw OverlappingSubnetsException .
    */
-  public void isOverlapping(NewSubnet newSubnet) {
+  private void isOverlapping(NewSubnet newSubnet) {
 
     FindIterable<Document> document = nets().find(or(
             getNewSubnetInRangeOfOldSubnet(newSubnet),
@@ -114,7 +127,7 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
    *
    * @return
    */
-  private List<Document> bindings( String id,NewSubnet newSubnet) {
+  private List<Document> bindings(String id, NewSubnet newSubnet) {
     List<Document> documents = Lists.newArrayList();
     Long min = newSubnet.getMinIP();
     Long max = newSubnet.getMaxIP();
@@ -123,6 +136,15 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
       min++;
     }
     return documents;
+  }
+
+  private Optional<Subnet> adapt(String id, Document doc) {
+    String nodeId = doc.getString("nodeId");
+    String ip = doc.getString("ip");
+    int slash = doc.getInteger("slash");
+    String description = doc.getString("description");
+
+    return Optional.of(new Subnet(id, nodeId, ip, slash, description));
   }
 
   private MongoCollection<Document> bindings() {

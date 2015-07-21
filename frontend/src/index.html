@@ -7,14 +7,28 @@
     <script src="../vendor/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="../vendor/jquery/dist/jquery.js"></script>
     <script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../vendor/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap.js"></script>
+    <script src="../vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="app/modules/app.js"></script>
     <script src="app/modules/network-interfaces.js"></script>
     <script src="app/modules/http.js"></script>
+    <script src="app/modules/subnet-manager.js"></script>
     <script src="app/modules/header.js"></script>
+    <script src="app/modules/notification.js"></script>
+    <script src="app/modules/tree-directive.js"></script>
     <link rel="stylesheet" href="app/abn_tree.css"/>
     <link rel="stylesheet" href="../vendor/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="app/subnet.css"/>
 </head>
 <body>
+<nets-header active-url="/"></nets-header>
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4"><notification-box></notification-box></div>
+    <div class="col-md-4"></div>
+</div>
+
 <div ui-view=""></div>
 
 </body>

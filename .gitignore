@@ -8,6 +8,7 @@ frontend/bin/
 frontend/node_modules/
 frontend/vendor/
 subnets/src/main/webapp/partials/concat*
+subnets/src/main/webapp/fonts/*
 frontend/src/partials/concat*
 
 subnets/src/main/webapp/fonts/glyphicons-halflings-regular.woff2

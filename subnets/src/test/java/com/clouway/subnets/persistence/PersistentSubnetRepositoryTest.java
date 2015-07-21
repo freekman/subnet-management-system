@@ -5,6 +5,7 @@ import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
 import com.github.fakemongo.Fongo;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
@@ -14,9 +15,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.mongodb.client.model.Filters.eq;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class PersistentSubnetRepositoryTest {
@@ -36,10 +38,10 @@ public class PersistentSubnetRepositoryTest {
     final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
     String id = repository.register(dummyNewSubnet);
 
-    List<Subnet> expectedSubnet = Lists.newArrayList(new Subnet(id, "TV", "0.0.0.0", 31, "note"));
+    List<Subnet> expectedSubnet = newArrayList(new Subnet(id, "TV", "0.0.0.0", 31, "note"));
     List<Subnet> actualSubnet = repository.findAll();
 
-    List<Binding> expectedBindings = Lists.newArrayList(new Binding(id, "note", "0.0.0.0"),new Binding(id, "note", "0.0.0.1"));
+    List<Binding> expectedBindings = newArrayList(new Binding(id, "note", "0.0.0.0"), new Binding(id, "note", "0.0.0.1"));
     List<Binding> actualBindings = findAllBindingsBySubnet(id);
 
     assertEquals(expectedSubnet, actualSubnet);
@@ -56,6 +58,24 @@ public class PersistentSubnetRepositoryTest {
   public void anotherOverlappingSubnet() throws Exception {
     repository.register(new NewSubnet("TV", "0.0.1.0", 31, ""));
     repository.register(new NewSubnet("TV", "0.0.0.0", 21, ""));
+  }
+
+  @Test
+  public void findSubnetById() throws Exception {
+    final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
+    String id = repository.register(dummyNewSubnet);
+
+    Subnet expected = new Subnet(id,dummyNewSubnet.nodeId,dummyNewSubnet.subnetIP,dummyNewSubnet.slash,"note");
+
+    Subnet result = repository.findById(id).get();
+
+    assertThat(result,is(expected));
+  }
+
+  @Test
+  public void findSubnetByUnexistingId() throws Exception {
+    Optional<Subnet> result = repository.findById("55ae2920cc795e24b1858c5c");
+    assertFalse(result.isPresent());
   }
 
   /**

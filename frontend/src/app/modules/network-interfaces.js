@@ -23,13 +23,20 @@ angular.module("networkInterfaces", ['http', 'tree', 'xeditable', 'ui.bootstrap'
           return {
             register: function (subnet) {
               return httpRequest.send("POST", "/r/subnets", subnet);
+            },
+            getById: function (id) {
+              return httpRequest.send("GET", "/r/subnets/" + id);
             }
           }
         }])
 
-        .controller("NetworkCtrl", ["$scope", "$modal", "subnetGateway", "nodeGateway", function ($scope, $modal, subnetGateway, nodeGateway) {
+        .controller("NetworkCtrl", ["$scope", "$modal", "$location", "subnetGateway", "nodeGateway", function ($scope, $modal, $location, subnetGateway, nodeGateway) {
 
           $scope.networkNodes = [];
+
+          $scope.navigateToSubnetManager = function (id) {
+            $location.path('/subnet/manager').search({"id": id});
+          };
 
           nodeGateway.fetchAllByParent("root").then(
                   function (data) {
