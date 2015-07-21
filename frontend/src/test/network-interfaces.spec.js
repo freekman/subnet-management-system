@@ -32,7 +32,7 @@ describe("networkInterfaces", function () {
 
   });
 
-  describe('networkGateway', function () {
+  describe('nodeGateway', function () {
     var nodeGateway, httpRequest, dummyPromise = {promise: 'dummy promise'};
 
     beforeEach(function () {

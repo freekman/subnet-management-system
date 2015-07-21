@@ -35,7 +35,7 @@ class PersistentNetworkNodeRepository implements NetworkNodeStore, NetworkNodeFi
     String name = newNode.name;
     String parentId = newNode.parentId;
 
-    if (isExisting(newNode)) {
+    if (isAlreadyRegistered(newNode)) {
       throw new NetworkNodeException("Node " + name + " on level " + newNode.parentId + " exists.");
     }
 
@@ -83,7 +83,7 @@ class PersistentNetworkNodeRepository implements NetworkNodeStore, NetworkNodeFi
     }
   }
 
-  private boolean isExisting(NewNetworkNode networkNode) {
+  private boolean isAlreadyRegistered(NewNetworkNode networkNode) {
     Document node = nodes().find(and(eq("name", networkNode.name), eq("parentId", networkNode.parentId))).first();
 
     return node != null;
