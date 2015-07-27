@@ -1,5 +1,6 @@
 package com.clouway.subnets.http;
 
+import com.clouway.subnets.core.IllegalRequestException;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.Subnet;
 import com.clouway.subnets.core.SubnetFinder;
@@ -17,7 +18,9 @@ import org.junit.Test;
 
 import static com.clouway.subnets.matchers.ReplyContainsObject.contains;
 import static com.clouway.subnets.matchers.ReplyStatus.statusIs;
+import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SubnetServiceTest {
@@ -83,4 +86,18 @@ public class SubnetServiceTest {
 
     assertThat(reply, statusIs(SC_NOT_FOUND));
   }
+
+  @Test
+  public void removeSubnet() throws Exception {
+    final String id = "55ae2920cc795e24b1858c5c";
+
+    context.checking(new Expectations() {{
+      oneOf(subnetStore).remove(id);
+    }});
+
+    Reply reply = subnetService.removeSubnet(id);
+
+    assertThat(reply, statusIs(SC_OK));
+  }
+
 }

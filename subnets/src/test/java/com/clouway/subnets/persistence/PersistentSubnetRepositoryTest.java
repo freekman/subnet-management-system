@@ -1,12 +1,12 @@
 package com.clouway.subnets.persistence;
 
 import com.clouway.subnets.core.Binding;
+import com.clouway.subnets.core.IllegalRequestException;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
 import com.github.fakemongo.Fongo;
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -65,17 +65,38 @@ public class PersistentSubnetRepositoryTest {
     final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
     String id = repository.register(dummyNewSubnet);
 
-    Subnet expected = new Subnet(id,dummyNewSubnet.nodeId,dummyNewSubnet.subnetIP,dummyNewSubnet.slash,"note");
+    Subnet expected = new Subnet(id, dummyNewSubnet.nodeId, dummyNewSubnet.subnetIP, dummyNewSubnet.slash, "note");
 
     Subnet result = repository.findById(id).get();
 
-    assertThat(result,is(expected));
+    assertThat(result, is(expected));
   }
 
   @Test
   public void findSubnetByUnexistingId() throws Exception {
     Optional<Subnet> result = repository.findById("55ae2920cc795e24b1858c5c");
     assertFalse(result.isPresent());
+  }
+
+  @Test
+  public void removeSubnet() throws Exception {
+    final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
+    String id = repository.register(dummyNewSubnet);
+
+    repository.remove(id);
+
+    Optional<Subnet> result = repository.findById(id);
+    List<Binding> bindings=findAllBindingsBySubnet(id);
+
+    assertFalse(result.isPresent());
+    assertThat(bindings.size(),is(0));
+  }
+
+  @Test(expected = IllegalRequestException.class)
+  public void removeMissingSubnet() throws Exception {
+    String id = "55ae2920cc795e24b1858c5c";
+
+    repository.remove(id);
   }
 
   /**

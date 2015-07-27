@@ -23,8 +23,8 @@ public class TransportInterceptor implements MethodInterceptor {
       return invocation.proceed();
     } catch (HibernateValidationException | ObjectCastException e) {
       return Reply.with("Incorrect input.").status(SC_BAD_REQUEST);
-    }catch (SubnetAlreadyExistException e){
-      return Reply.with("Subnet is taken!").status(SC_BAD_REQUEST);
+    }catch (IllegalRequestException e){
+      return Reply.with("Illegal request!").status(SC_BAD_REQUEST);
     }catch (OverlappingSubnetException e){
       return Reply.with("Subnet range is overlapping!").status(SC_BAD_REQUEST);
     }catch (NetworkNodeException e){

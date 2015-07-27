@@ -37,6 +37,13 @@ describe("networkInterfaces", function () {
       expect(promise).toEqual({promise: "DummyPromise"});
     });
 
+    it("should remove subnet",function(){
+      var promise = gateway.remove("abc");
+
+      expect(httpRequest.send).toHaveBeenCalledWith('DELETE', '/r/subnets/abc');
+      expect(promise).toEqual({promise: "DummyPromise"});
+    });
+
   });
 
   describe('nodeGateway', function () {

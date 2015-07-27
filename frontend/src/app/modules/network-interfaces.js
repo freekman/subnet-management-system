@@ -26,6 +26,9 @@ angular.module("networkInterfaces", ['http', 'tree', 'xeditable', 'ui.bootstrap'
             },
             getById: function (id) {
               return httpRequest.send("GET", "/r/subnets/" + id);
+            },
+            remove:function(id){
+              return httpRequest.send("DELETE","/r/subnets/"+id);
             }
           }
         }])

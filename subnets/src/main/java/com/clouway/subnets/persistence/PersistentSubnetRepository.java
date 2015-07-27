@@ -1,5 +1,6 @@
 package com.clouway.subnets.persistence;
 
+import com.clouway.subnets.core.IllegalRequestException;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
@@ -57,6 +58,15 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
   }
 
   @Override
+  public void remove(String id) {
+    if (!getSubnetById(id).isPresent()) {
+      throw new IllegalRequestException();
+    }
+    nets().deleteOne(new Document("_id", new ObjectId(id)));
+    bindings().deleteMany(new Document("subnetId", id));
+  }
+
+  @Override
   public List<Subnet> findAll() {
     List<Subnet> subnetList = new ArrayList<>();
     FindIterable<Document> document = nets().find();
@@ -80,6 +90,14 @@ class PersistentSubnetRepository implements SubnetStore, SubnetFinder {
 
   @Override
   public Optional<Subnet> findById(String id) {
+    return getSubnetById(id);
+  }
+
+  /**
+   * @param id-subnet Id
+   * @return Returns Optional<Subnet>
+   */
+  private Optional<Subnet> getSubnetById(String id) {
     Document document = nets().find(eq("_id", new ObjectId(id))).first();
     if (document != null) {
 
