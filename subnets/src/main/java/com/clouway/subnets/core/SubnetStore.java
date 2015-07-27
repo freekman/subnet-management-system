@@ -14,4 +14,14 @@ public interface SubnetStore {
    */
   String register(NewSubnet newSubnet);
 
+
+  /**
+   * Updates the NewSubnet by using the slash value
+   * Trows OverlappingSubnetException if the new range for the subnet is overlapping.
+   *
+   * @param slash-int for the new slash.
+   * returns  a new NewSlash containing the new slash value
+   */
+  NewSlash resize(String id, int slash);
+
 }

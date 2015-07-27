@@ -44,12 +44,12 @@ describe("subnet-manager", function () {
       expect(scope.subnet).toEqual(subnet);
     });
 
-    it("should resize subnet", function () {
+    iit("should resize subnet", function () {
       var subnet = {"ip": "0.0.0.0", "slash": "23"};
       var slash = "20";
       scope.resize(slash);
 
-      expect(gateway.resize).toHaveBeenCalledWith("fakeID", slash);
+      expect(gateway.resize).toHaveBeenCalledWith("fakeID", {"value":slash});
 
       deffer.resolve(subnet);
       responseDefer.resolve(slash);

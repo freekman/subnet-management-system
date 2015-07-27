@@ -6,7 +6,6 @@ import com.clouway.subnets.core.OverlappingSubnetException;
 import com.clouway.subnets.core.Subnet;
 import com.github.fakemongo.Fongo;
 import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
@@ -65,17 +64,120 @@ public class PersistentSubnetRepositoryTest {
     final NewSubnet dummyNewSubnet = new NewSubnet("TV", "0.0.0.0", 31, "");
     String id = repository.register(dummyNewSubnet);
 
-    Subnet expected = new Subnet(id,dummyNewSubnet.nodeId,dummyNewSubnet.subnetIP,dummyNewSubnet.slash,"note");
+    Subnet expected = new Subnet(id, dummyNewSubnet.nodeId, dummyNewSubnet.subnetIP, dummyNewSubnet.slash, "note");
 
     Subnet result = repository.findById(id).get();
 
-    assertThat(result,is(expected));
+    assertThat(result, is(expected));
   }
 
   @Test
   public void findSubnetByUnexistingId() throws Exception {
     Optional<Subnet> result = repository.findById("55ae2920cc795e24b1858c5c");
     assertFalse(result.isPresent());
+  }
+
+  @Test
+  public void resizeToSmallerSubnet() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "3.3.3.3", 30, "");
+    final String id = repository.register(newSubnet);
+
+    repository.resize(id, 31);
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actualSubnet = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, 31, "note");
+
+
+    List<Binding> actualBindings = newArrayList(
+            new Binding(id, "note", "3.3.3.2"),
+            new Binding(id, "note", "3.3.3.3"));
+
+    List<Binding> expectedBindings = findAllBindingsBySubnet(id);
+
+    assertThat(subnet, is(actualSubnet));
+    assertThat(expectedBindings, is(actualBindings));
+  }
+
+  @Test
+  public void resizeToSmallerFromBothEnds() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "3.3.3.3", 29, "");
+    String id = repository.register(newSubnet);
+
+    Subnet subnet2 = repository.findById(id).get();
+
+    repository.resize(id, 31);
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, 31, "note");
+
+    List<Binding> actualBindings = newArrayList(
+            new Binding(id, "note", "3.3.3.2"),
+            new Binding(id, "note", "3.3.3.3"));
+
+    List<Binding> expectedBindings = findAllBindingsBySubnet(id);
+
+    assertThat(subnet, is(actual));
+    assertThat(expectedBindings, is(actualBindings));
+  }
+
+  @Test
+  public void resizeToBiggerSubnet() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "3.3.3.3", 31, "");
+    String id = repository.register(newSubnet);
+
+    repository.resize(id, 30);
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, 30, "note");
+
+
+    List<Binding> actualBindings = newArrayList(
+            new Binding(id, "note", "3.3.3.2"),
+            new Binding(id, "note", "3.3.3.3"),
+            new Binding(id, "note", "3.3.3.0"),
+            new Binding(id, "note", "3.3.3.1"));
+
+    List<Binding> expectedBindings = findAllBindingsBySubnet(id);
+
+    assertThat(subnet, is(actual));
+    assertThat(expectedBindings, is(actualBindings));
+  }
+
+  @Test
+  public void resizeToBiggerFromBothEnds() throws Exception {
+    NewSubnet newSubnet = new NewSubnet("nodeId", "3.3.3.3", 31, "");
+    String id = repository.register(newSubnet);
+
+    repository.resize(id, 29);
+
+    Subnet subnet = repository.findById(id).get();
+    Subnet actual = new Subnet(id, newSubnet.nodeId, newSubnet.subnetIP, 29, "note");
+
+    List<Binding> actualBindings = newArrayList(
+            new Binding(id, "note", "3.3.3.2"),
+            new Binding(id, "note", "3.3.3.3"),
+            new Binding(id, "note", "3.3.3.0"),
+            new Binding(id, "note", "3.3.3.1"),
+            new Binding(id, "note", "3.3.3.4"),
+            new Binding(id, "note", "3.3.3.5"),
+            new Binding(id, "note", "3.3.3.6"),
+            new Binding(id, "note", "3.3.3.7"));
+
+    List<Binding> expectedBindings = findAllBindingsBySubnet(id);
+
+    assertThat(subnet, is(actual));
+    assertThat(expectedBindings, is(actualBindings));
+  }
+
+  @Test(expected = OverlappingSubnetException.class)
+  public void anotherResizeToBiggerSubnet() throws Exception {
+    NewSubnet newSubnetOne = new NewSubnet("nodeId", "0.0.0.0", 30, "");
+    NewSubnet newSubnetTwo = new NewSubnet("nodeId", "0.0.0.25", 30, "");
+
+    String idOne = repository.register(newSubnetOne);
+    repository.register(newSubnetTwo);
+
+    repository.resize(idOne, 22);
   }
 
   /**
@@ -100,5 +202,4 @@ public class PersistentSubnetRepositoryTest {
 
     return bindings;
   }
-
 }

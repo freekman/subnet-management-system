@@ -1,5 +1,6 @@
 package com.clouway.subnets.http;
 
+import com.clouway.subnets.core.NewSlash;
 import com.clouway.subnets.core.NewSubnet;
 import com.clouway.subnets.core.SecureTransport;
 import com.clouway.subnets.core.Subnet;
@@ -14,6 +15,7 @@ import com.google.sitebricks.headless.Request;
 import com.google.sitebricks.headless.Service;
 import com.google.sitebricks.http.Get;
 import com.google.sitebricks.http.Post;
+import com.google.sitebricks.http.Put;
 
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
@@ -49,8 +51,27 @@ public class SubnetService {
     if (!subnet.isPresent()) {
       return Reply.with("Subnet not found!").status(SC_NOT_FOUND);
     }
-    SubnetDTO dto=adapt(subnet.get());
+    SubnetDTO dto = adapt(subnet.get());
     return Reply.with(dto).as(Json.class).ok();
+  }
+
+  @Put
+  @At("/:id/resize")
+  public Reply<?> resize(@Named("id") String id, Request request) {
+    SlashDTO dto = request.read(SlashDTO.class).as(Json.class);
+    NewSlash slash = adapt(dto);
+
+    NewSlash newSlash = subnetStore.resize(id, slash.value);
+    SlashDTO slashDTO = adapt(newSlash);
+    return Reply.with(slash).as(Json.class).ok();
+  }
+
+  private SlashDTO adapt(NewSlash newSlash) {
+    return new SlashDTO(newSlash.value);
+  }
+
+  private NewSlash adapt(SlashDTO dto) {
+    return new NewSlash(dto.value);
   }
 
   private SubnetDTO adapt(Subnet subnet) {
