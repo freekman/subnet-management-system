@@ -26,6 +26,9 @@ angular.module("networkInterfaces", ['http', 'tree', 'xeditable', 'ui.bootstrap'
             },
             getById: function (id) {
               return httpRequest.send("GET", "/r/subnets/" + id);
+            },
+            resize: function (id, slash) {
+              return httpRequest.send("PUT","/r/subnets/"+id+"/resize",slash);
             }
           }
         }])

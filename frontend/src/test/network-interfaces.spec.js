@@ -37,6 +37,14 @@ describe("networkInterfaces", function () {
       expect(promise).toEqual({promise: "DummyPromise"});
     });
 
+    it("should resize subnet",function(){
+      var slash = "23";
+      var promise = gateway.resize("123", slash);
+
+      expect(httpRequest.send).toHaveBeenCalledWith('PUT', '/r/subnets/123/resize',slash);
+      expect(promise).toEqual({promise: "DummyPromise"});
+    });
+
   });
 
   describe('nodeGateway', function () {

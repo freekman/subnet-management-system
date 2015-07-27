@@ -7,4 +7,9 @@ angular.module("subnet-manager", ['http', 'networkInterfaces'])
             $scope.subnet = data;
           });
 
+          $scope.resize = function (newSlash) {
+            subnetGateway.resize(subnetID, newSlash).then(function (data) {
+              $scope.subnet.slash = data;
+            })
+          }
         }]);

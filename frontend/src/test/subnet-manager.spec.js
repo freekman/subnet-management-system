@@ -6,15 +6,18 @@ describe("subnet-manager", function () {
   beforeEach(module('subnet-manager'));
 
   describe("SubnetManagerCtrl", function () {
-    var scope, gateway, deffer, location;
+    var scope, gateway, deffer, location, responseDefer;
 
     beforeEach(function () {
 
       inject(function ($controller, $rootScope, $q) {
         scope = $rootScope.$new();
         deffer = $q.defer();
+        responseDefer = $q.defer();
+
         gateway = {
-          getById: jasmine.createSpy().andReturn(deffer.promise)
+          getById: jasmine.createSpy().andReturn(deffer.promise),
+          resize: jasmine.createSpy().andReturn(responseDefer.promise)
         };
 
         location = {
@@ -39,6 +42,20 @@ describe("subnet-manager", function () {
       scope.$digest();
 
       expect(scope.subnet).toEqual(subnet);
+    });
+
+    it("should resize subnet", function () {
+      var subnet = {"ip": "0.0.0.0", "slash": "23"};
+      var slash = "20";
+      scope.resize(slash);
+
+      expect(gateway.resize).toHaveBeenCalledWith("fakeID", slash);
+
+      deffer.resolve(subnet);
+      responseDefer.resolve(slash);
+      scope.$digest();
+
+      expect(scope.subnet.slash).toEqual(slash);
     });
 
   });
